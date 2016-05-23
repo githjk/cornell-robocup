@@ -1,0 +1,91 @@
+<html>
+ <head>
+ </head>
+ <body bgcolor="#FFFFFF" link="blue" alink="blue" vlink="blue">
+  
+  <table border="0">  
+   <tr><td width="500">
+ 
+    <h2><b>Play: <font color="green">Cross Crease Pass</font></b></h2>    
+    <hr width="100%">
+    <a name="illustration"></a>
+    <h3><b><u>Description:</u></b></h3>
+Similar to plays in the past, the creator sets up and completes a
+cross-crease pass from the aggressor and shot on goal. The basic concept
+is to get the opponent goalie to setup on the wrong side of the field,
+then shoot and score around behind him before he has time to react.
+
+    <h3><b><u>Illustration:</u></b></h3>
+    <img src="images/crossCreasePassPlay.jpg">
+
+    <a name="positionsPresent"></a>
+    <h3><b><u>Positions Present:</u></b></h3>
+    <ul>
+     <li>Blocker
+     <li>Defender
+     <li>Aggressor
+     <li>Creator
+     <li>Special Op Creator
+    </ul>
+
+    <a name="positionStrategies"></a>
+    <h3><b><u>Position Strategies:</u></b></h3>
+
+    <table border="1">
+    <table border="1">
+     <tr>
+      <td width="500">
+       <h2><b><font color="green">Blocker + Defender:</font></b></h2>
+       Work together cutting down shots in same fashion as described in <a href="play_looseDefense.html">Loose Defense</a>.
+       <br>Call <b>TandemBlockerSkill</b> and <b>TandemDefenderSkill</b>
+      </td>
+     </tr>
+     <tr>
+      <td width="500">
+       <h2><b><font color="green">Aggressor:</font></b></h2>
+        Turns to creator, then kicks, running to the corner post but outside of defense zone.
+        <br>Call <b>CrossCreasePassSkill</b>
+      </td>
+     </tr>
+      <tr> 
+      <td width="500">
+       <h2><b><font color="green">Creator + Special Op Creator:</font></b></h2>
+       Creator maintains position to receive a cross-crease pass. Special-Op screens approaching opponents, while maintaining a position between the aggressor and the creator in order to catch stray passes.
+       <br>Call <b>OppositeReboundOffenseSkill</b> for Creator and <b>MidReboundOffenseSkill</b> on special op.
+     </tr> 
+    </table>
+
+    <a name="transitions"></a>
+    <h3><b><u>Transitions:</u></b></h3>
+
+    <hr>
+    <table border="0">
+     <tr>
+      <td width="100"><ul><li><a href="play_touchShoot.html">Touch Shoot</a></ul></td>  
+      <td>Once the aggressor is aligned to shot at the creator and kicks the ball, or if the 
+play timer times out.
+      </td>
+     </tr>
+    </table>
+    <hr>
+
+   <h3><b><u>Position Switching:</u></b></h3>
+    <hr>
+    <table border="0">
+     <tr>
+      <td width="100"><ul><li>Aggressor, SpecialOpCreator</ul></td>
+      <td><ul>
+			<li>If aggressor loses possession of the ball and special op closer than
+			    aggressor, switch.
+          </ul>
+      </td>
+     </tr>
+    </table>
+    <hr>
+
+    </ul>
+   </tr></td>
+  </table>
+
+ </body>
+</html>

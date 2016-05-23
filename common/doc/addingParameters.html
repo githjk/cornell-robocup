@@ -1,0 +1,20 @@
+<html>
+ <head>
+ </head>
+ <body bgcolor="#FFFFFF" link="blue" alink="blue" vlink="blue">
+    <h2><b>Adding Parameters to the System</b></h2>
+
+To add parameters to an object, your class must inherit from ParameterOperations. Both the base skill and base play classes inherit from ParameterOperations, so any new plays and skills already have this functionality given to them. From there you must follow three steps to make parameters work: 
+
+<ul>
+ <li>Declare your parameters -- This is done in your header file. Style convention says the names should be done in all capital letters. 
+ 
+<li>Implement loadValues() -- The code for loadValues is mostly the same for all objects that use it. Particular for your object are the name and relative path of the parameter file, and the specific values to be read in. Use READ_FLOAT() and READ_INT() to read in floats and integers. 
+
+<li>Create the param file -- Parameter files are kept in the proper subdirectory under the runtime folder. Skill params are kept in the "Skill Params" subdirectory, and play params are kept in the "Play Params" subdirectory. Use '#' to denote comments in the file, and define your parameters in the same order that they are read in your loadValues() function. Also make sure your parameters have the same spelling and case that you used in the loadValues() method.
+</ul>
+
+Finally, your parameters must be read in at runtime. If you are writing a play or skill, then simply adding the play/skill to the AI correctly will do the trick. If you are writing some other object, you will need to make sure that its loadValues() function gets called at runtime, and whenever else parameters may need to be reloaded.
+
+ </body>
+</html>

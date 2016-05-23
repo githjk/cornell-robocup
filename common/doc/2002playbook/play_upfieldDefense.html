@@ -1,0 +1,109 @@
+<html>
+ <head>
+ </head>
+ <body bgcolor="#FFFFFF" link="blue" alink="blue" vlink="blue">
+  
+  <table border="0">  
+   <tr><td width="500"> 
+    <h2><b>Play: <font color="green">Upfield Defense</font></b></h2>    
+    <h3><b><u>Description:</u></b></h3>
+Upfield defense is similar to loose defense, but the special op plays 
+upfield. The basic idea is that when on offense upfield it is easy to 
+lose possession of the ball. We don't want the special op to be running 
+back and forward from back field to upfield, and we would rather have him 
+play behind the aggressor and block the ball from getting knocked back 
+toward our goal. 
+
+    <h3><b><u>Illustration:</u></b></h3>
+    <img src="images/upfieldDefensePlay.jpg">
+
+    <a name="positionsPresent"></a>
+    <h3><b><u>Positions Present:</u></b></h3>
+    <ul>
+     <li>Blocker
+     <li>Defender
+     <li>Aggressor
+     <li>Special Op Aggressor
+     <li>Creator
+    </ul>
+
+    <a name="positionStrategies"></a>
+    <h3><b><u>Position Strategies:</u></b></h3>
+
+    <table border="1">
+     <tr>
+      <td width="500">
+      <h2><b><font color="green">Blocker + Defender</font></b></h2>
+      These positions act the same was as in <a 
+href="play_looseDefense.html">loose defense</a>.<br><br>Blocker: <b>TandemBlockerSkill</b> <br>Defender: <b>TandemDefenderSkill</b>
+      </td>
+     </tr>
+     <tr>
+      <td width="500">
+       <h2><b><font color="green">Special Op 
+Aggressor:</font></b></h2>
+       Plays slightly offset towards the middle of the field behind the aggressor. Offset should be great enough that knocking 
+the ball past the aggressor AND the special op should be difficult. If an opponent is threatening from behind, but is not too close and not 
+too far away, BehindScreenOffenseSkill will screen this robot. 
+<br><br>Special Op Aggressor: <b>BehindScreenOffenseSkill</b> <br>
+      </td>
+     </tr>
+     <tr>
+      <td width="500">
+       <h2><b><font color="green">Aggressor:</font></b></h2>
+       <ul>
+        <li>Ball Free->approach ball
+        <li>Opponent has ball -> strip ball to outer side (closest 
+            sideline)
+        <li>Once we have the ball play will transfer to single assist 
+        offense.
+       </ul>Aggressor: <b>AcquirePosessionSkill</b> <br>
+      </td>
+     </tr>
+     <tr>
+      <td width="500">
+       <h2><b><font color="green">Creator:</font></b></h2>
+        Get open for a forward pass.<br><br>Creator: <b>CreatorLookForwardPassSkill</b> <br>
+      </td>
+     </tr>
+    </table>
+
+    <a name="transitions"></a>
+    <h3><b><u>Transitions:</u></b></h3>
+ 
+    <hr>
+    <table border="0">
+     <tr>
+      <td width="100"><ul><li><a href="play_singleAssistOffense.html">Single Assist Offense</a></ul></td>
+      <td>We have possession of the ball.</td>
+     </td></tr>
+    </table>
+    <hr>
+    <table border="0">
+     <tr>
+      <td width="100"><ul><li><a href="play_looseDefense.html">Loose Defense</a></ul></td>
+      <td>Ball is behind the half line.</td>
+     </tr>
+    </table>
+    <hr>
+
+   <h3><b><u>Position Switching:</u></b></h3>
+    <hr>
+    <table border="0">
+     <tr>
+      <td width="100"><ul><li>Aggressor, Creator, SpecialOpAggressor</ul></td>
+      <td><ul>
+		    <li>If special op farther upfield than creator, switch
+			<li>If creator or special op closer to ball than aggressor, switch with aggressor.
+          </ul>
+      </td>
+     </tr>
+    </table>
+    <hr>
+
+    </ul>
+   </tr></td>
+  </table>
+
+ </body>
+</html>

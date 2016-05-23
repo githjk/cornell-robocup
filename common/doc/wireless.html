@@ -1,0 +1,90 @@
+<html>
+ <head>
+ </head>
+ <body bgcolor="#FFFFFF" link="blue" alink="blue" vlink="blue">
+    <h2><b>Wireless Control</b></h2>
+
+    The Obstacle Avoidance and Trajectory Generation code create velocities for each robot.  "Wireless control" refers to the process of converting these velocities into radio commands that the robots can understand.  The files used for Wireless Control are found in the "common\wireless\" folder of the project.
+
+    <a name="Serial_vs_Parallel"></a>
+    <h3><b><u>Serial Port vs Parallel Port Interface:</u></b></h3>
+
+	In 1999, when this project first began, we sent the commands to a transmitter connected to the parallel port on the computer.  I believe this was because the transmitter board was a pre-built kit.  However, there was no reason not to communicate through the parallel port.  We were running Windows 98 on our computers, which had no security features to prevent such communication.
+<P>
+In 2000, we began using Windows 2000, which has more protection features.  In order to communicate through the parallel port, it was necessary to run a separate program, "giveio", which would essentially disable the security.  Running this program required administrator access to the computer, and was essentially just a cheap fix rather than a real solution.  We have yet to find an appropriate way to send data through the parallel port.  It may require writing a Windows driver.
+<P>
+Finally, in 2002, we now send wireless commands through the serial port.  There were three reasons for this change.  First, the code to send data through the serial port is extremely simple and straightforward.  Secondly, we needed to build a new transmitter board.  The boards from 1999 were becoming older and less reliable, and no one really knew how they worked anymore.  Finally, we will have several different types of radio transmitters for the 2002 system.  The new boards must be able to interface with any of them.  The old boards could only interface with Radiometrix transmitters.
+<P>
+One of the main objections to using a serial port is that they are being gradually phased out of new computers.  Future teams should examine the possibility of using the USB port to communicate to the transmitter.  Our current research has suggested that USB adds too much latency to the system.  However, future advancements may reduce this latency.
+
+
+    <a name="Packet_Structure"></a>
+    <h3><b><u>The Packet Structure:</u></b></h3>
+
+	The Radiometrix transmitters can send 25 bytes per packet.  We decided to send commands for all the robots in one single packet.  For a team of five robots, we could send five bytes per robot.  However, we want the same robots to be used for the RoboFlag environment and the 11 vs 11 RoboCup exhibition match.  Therefore, we have chosen to allocate four bytes per robot, so that each packet contains commands for up to six robots.  For team with seven to twelve robots, we will send two packets per frame.
+<P>
+The structure of the packet is as follows:
+<P>
+<UL>
+  <LI>Byte 0:     Identity byte - this identifies whether the packet controls robots 0-5, or 6-11.  For robots with duplex communication systems, this byte also identifies which robot is allowed to communicate back to the Intelligence and Control System.
+  <LI>Bytes 1-4: Commands for robot 0 (or robot 6)
+  <LI>Bytes 5-8: Commands for robot 1 (or robot 7)
+  <LI>Bytes 9-12: Commands for robot 2 (or robot 8)
+  <LI>Bytes 13-16: Commands for robot 3 (or robot 9)
+  <LI>Bytes 17-20: Commands for robot 4 (or robot 10)
+  <LI>Bytes 21-24: Commands for robot 5 (or robot 11)
+</UL>
+<P>
+Each set of four bytes is organized as follows:
+<P>
+For 2000 and 2001 robots:
+<UL>
+  <LI>Byte 0: Velocity magnitude of Wheel One
+  <LI>Byte 1: Velocity magnitude of Wheel Two
+  <LI>Byte 2: Velocity magnitude of Wheel Three
+  <LI>Byte 3: Directions for each wheel velocity, plus commands for kicking, dribbling, side dribbling
+</UL>
+<P>
+For 2002 robots:
+<UL>
+  <LI>Byte 0: Forward velocity (magnitude and direction)
+  <LI>Byte 1: Sideways velocity (magnitude and direction)
+  <LI>Byte 2: Rotational velocity (magnitude and direction)
+  <LI>Byte 3: Commands for kicking, dribbling, side dribbling
+</UL>
+<P>
+The exact packet structure can potentially change throughout the development process.  To find the most up-to-date packet structure, you should examine the code directly.  The packet structure is built in the file, "WirelessSender.cpp", in the functions "buildRobot2000", "buildRobot2001", and "buildRobot2002".  Note that the packet structure for 2000 and 2001 assumes that the robot is a three-wheeled omni robot.  Also, in order to calculate the correct velocities for each individual wheel, the Intelligence and Control system must be aware of the geometry of the wheels.  For the 2002 packet structure, the only assumption required is that the robot has omni-directional capabilities.  The robot's on board electronics are responsible for converting the commands into individual wheel velocities.  This requires more computation on board the robots, but it allows us to send more detailed velocities to the robots, and could potentially allow us to field hybrid teams of robots (with different wheel geometries) without changing our code.
+
+    <a name="Transmitter_Board"></a>
+    <h3><b><u>The Transmitter Board:</u></b></h3>
+
+As of this draft of the documentation, the transmitter board can only interface with Radiometrix transmitters (418 MHz and 433 MHz).  The new transmitter boards have been designed but not constructed yet.  The interface to the serial port has been finalized, however.  In order to signal the beginning or end of a packet, the code sends header and footer characters to the transmitter board.  The board then makes sure that exactly 25 bytes were received between the header and footer.  If so, the packet is sent.
+<P>
+
+If we are sending one packet at a time (in order to control up to six robots):
+<OL>
+  <LI>To start sending the packet, we send 0xFF
+  <LI>To end the packet, we send 0xFE
+</OL>
+While the packet is being transmitted, a new packet can't be sent for approximately 10 ms
+<P>
+If we are sending two packets at a time (in order to control seven to twelve robots) 
+<OL>
+  <LI>To start sending the first packet, we send 0xFF
+  <LI>To end the first packet, we send 0xFD (indicating that another packet is coming)
+  <LI>To start sending the second packet, we send 0xFF
+  <LI>To end the second packet, we send 0xFE
+</OL>
+While the packets are being transmitted, a new packet can't be sent for approximately 20 ms
+<P>
+If new packets are sent to the transmitter board while the board is transmitting, the new packet will be dropped and the yellow LED will turn on.
+
+    <a name="Debugging_Wireless"></a>
+    <h3><b><u>Debugging the Wireless System:</u></b></h3>
+
+If the system is running properly at sixty frames per second, the transmitter light on the Radiometrix should be a solid red.  In 2001, this was not the case.  The transmitter light tended to blink semi-regularly.  Unfortunately, this problem was ignored since the robots were still being controlled successfully.  It was later discovered that a network problem was causing the system to transmit at approximately twenty frames per second instead of sixty.  The system is transmitting properly at sixty frames per second now, although a packet is occasionally dropped.  Packets are not dropped enough to cause a problem with the system, however it would probably be wise to explore the source of these dropped packets more fully in 2003.
+<P>
+One of the best ways to debug the transmitter system is to connect an oscilloscope to the transmitter board to directly observe packets being sent.  A working system should send one new packet approximately every sixteen milliseconds (a certain amount of jitter is unavoidable).  This is one of the first tests that should be done if the overall system starts behaving incorrectly.
+
+ </body>
+</html>

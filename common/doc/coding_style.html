@@ -1,0 +1,53 @@
+<html>
+ <head>
+ </head>
+ <body bgcolor="#FFFFFF" link="blue" alink="blue" vlink="blue">
+    <h2><b>Coding Style</b></h2>
+
+<H2>Variable Naming and Function naming</H2>
+<UL>
+  <LI>Starts with a lowercase letter, uses camel format for variables of several 
+  words. Abbreviate words as much as possible, but still keeping readability. 
+  Examples: fieldObject, mapleSyrup, varWithMoreWordsThanWeNeed. 
+  <LI>... </LI></UL>
+<H2>Class Naming and Structs</H2>
+<UL>
+  <LI>Starts with a capital letter, also uses camel format. Examples: 
+  ObstacleAvoidance, ManicAIDeveloper, RoboSoccerTourney. 
+  <LI>... </LI></UL>
+<H2>Constants</H2>
+<UL>
+  <LI>ALL UPPERCASE. Underscores allowed. Example: THIS_IS_A_CONSTANT. Note: 
+  iNVERTEDcAMELiSnOTaLLOWED !!!!! </LI></UL>
+<H2>File Naming</H2>
+<UL>
+  <LI>All lowercase with underscores. </LI></UL>
+<H2>Comments</H2>
+<UL>
+  <LI>Write comments before every function. DO NOT WRITE COMMENTS at the end of 
+  every line so that every line is 200 characters long. Bring the comment to the 
+  line above. Max chars per line = 72. </LI></UL>
+<H2>Tab size...</H2>
+<UL>
+  <LI>... is <B>2</B>. Live with it. </LI></UL>
+<H2>Function parameter passing</H2>
+<UL>
+  <LI>If you need to return &gt; 1 object/data back, pass objects to store the 
+  output by pointer. 
+  <LI>If you need input and output data, pass in input(s) first by const 
+  reference, pass in output vars to hold output by pointer. 
+  <LI>Note: primitive inputs can be passed in by value. 
+  <UL>e.g. <TT><B>void function(const Object &amp;o, const Pair &amp;p, Pair 
+    *q, Line *l)</B></TT> <BR>has two inputs, an object and a pair, and two 
+    outputs: a Pair and a Line, which are stored in parameters passed into the 
+    function. </UL></LI></UL>
+<H2></H2>
+<H2>Issues with return types: Pair, Pair&amp;, Pair* ...</H2>
+<UL>
+  <LI>If you want to return a simple type, such as a Pair, for instance, of a 
+  point found, you don't want people to modify the result because it's 
+  pointless. Hence, return as Pair. 
+</ul>
+
+ </body>
+</html>

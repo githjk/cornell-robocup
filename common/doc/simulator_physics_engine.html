@@ -1,0 +1,119 @@
+<html>
+ <head>
+ </head>
+ <body bgcolor="#FFFFFF" link="blue" alink="blue" vlink="blue">
+    <h2><b>Physics Engine</b></h2>
+
+    <a name="Collision_Detection"></a>
+    <h3><b><u>Collision Detection:</u></b></h3>
+<p>
+For the purpose of collision detection, there are several algorithms that are used.  There are three basic types of objects which can interact via collision in the simulation:
+<p>
+<ol>
+ <li>Line - a line segment, stationary (wall)
+ <li>Circle - a slowly moving circle (robot).  v*delta_t << r  (it doesn't move very much in a timestep compared to its radius)
+ <li>FastCircle - a potentially quickly moving circle (ball).
+</ol>
+<p>
+Because of the algorithms I've chosen, there are four situations that must be taken care of:
+<p>
+<ol>
+ <li>Circle collides with line (robot hitting into a wall).
+ <li>Circle collides with circle (robot hits another robot).
+ <li>Fast circle collides with line (ball hitting a wall)
+ <li>Fast circle collides with any type of circle (ball hitting other ball, or a robot)
+</ol>
+<p>
+<b>Situation 1:  Circle collides with line</b>
+<p>
+This situation is the simplest to look for.  If at the end of a timestep, the distance between the center of a circle and a line segment is less than the radius, and the closest point on the line segment is actually between the ends, then there was a collision. 
+<p>
+<img src="images/physics1.jpg">
+<p>
+Calculation of the time of impact is very simple.  The time relative to the present that the impact occurred was the penetration distance divided by the normal velocity.
+<p>
+<b>Situation 2:  Circle collides with circle</b>
+<p>
+This situation is also very easy to detect.  If the distance between two circles is less than the sum of their radii, then clearly they are overlapping.  
+<p>
+Finding the exact time of impact is a little harder.  One must solve the equations of motion such that the distance between the two moving points (which are assumed to undergo no acceleration during the tick) are exactly r1+r2 apart in distance.  It turns out that there is a very nice closed form solution to this problem, given in the equations:
+<p>
+<font color="blue">
+dx = circle1->x - circle2->x;<br>
+dy = circle1->y - circle2->y;<br>
+dvx = circle1->vx - circle2->vx;<br>
+dvy = circle1->vy - circle2->vy;<br>
+a = dvx*dx+dvy*dy;<br>
+b = dvx*dvx + dvy*dvy;<br>
+rs = (circle1->r + circle2->r)*(circle1->r + circle2->r);<br>
+discriminant = a*a-b*(dx*dx+dy*dy-rs);<br>
+t = -(a+sqrt(discriminant))/b;<br>
+</font>
+<p>
+Hopefully these formulae are clear, the first four are just calculating everything in terms of a relative coordinate system.
+<p>
+<img src="images/physics2.jpg">
+<p>
+<b>Situation 3:  Fast circle collides with line</b>
+<p>
+This situation is a bit more complex than it would seem.  Because it's quite possible for a fast circle to jump between one side of a wall and appear on the other during one step of the simulation.  Because of this, we cannot use geometrical overlap for collision detection.  Instead, we must calculate the projected time of collision, and then see if that falls within the last tick.  A sign trick is used to prevent unnecessary division in the case that the collision is in the future (and the time is positive).  The formula is just t = d/v, where d is distance and v is the velocity in the direction normal to the wall.
+<p>
+<b>Situation 4:  Fast circle collides with circle</b>
+<p>
+This case uses the same algorithm as a circle colliding with a circle, however instead of looking for overlap, it simply tries to find a collision time, if it is a real number, and then it checks it to see if it occurred during the last timestep.  The same formulae are used.  The discriminant must be positive or 0 to get a real answer for the time, and the negative root is always taken, of course (since we are not interested in the future, only the past).
+<p>
+    <a name="Collision_Resolution"></a>
+    <h3><b><u>Collision Resolution:</u></b></h3>
+
+Collision resolution is a process applied to the colliding objects at the exact time of collision to modify their velocities and trajectories according to Newtonian physics (without regard for angular components).
+<p>
+In the case of a collision with a wall, the velocity of a circle (robot or ball) is reversed in the direction normal to the wall, with an optional reduction (an absorption of kinetic energy, akin to real life situations).
+<p>
+In the case of two circles colliding, the relative velocity of one of the circles is broken down into two vectors, the velocity component parallel to the line between their centers, and the velocity component perpendicular to that line.  The parallel components are then put into the one-dimensional equations of collision for two points of different masses.
+<p>
+The following formulae are used:
+<p>
+<font color="blue">
+dx = circle1->x - circle2->x;<br>
+dy = circle1->y - circle2->y;<br>
+k  = 1.0/sqrt(dx*dx+dy*dy);<br>
+dx = dx*k;<br>
+dy = dy*k;<br>
+dot1 = circle1->vx*dx+circle1->vy*dy;<br>
+dot2 = circle2->vx*dx+circle2->vy*dy;<br>
+v_parallel_x1 = dot1*dx;<br>
+v_parallel_y1 = dot1*dy;<br>
+v_parallel_x2 = dot2*dx;<br>
+v_parallel_y2 = dot2*dy;<br>
+v_perp_x1 = circle1->vx-v_parallel_x1;<br>
+v_perp_y1 = circle1->vy-v_parallel_y1;<br>
+v_perp_x2 = circle2->vx-v_parallel_x2;<br>
+v_perp_y2 = circle2->vy-v_parallel_y2;<br>
+m1 = circle1->m;<br>
+m2 = circle2->m;<br>
+c1 = 1/(m1+m2);<br>
+dm = (m1-m2);<br>
+circle1->vx = c1*(dm*v_parallel_x1 + 2*m2*v_parallel_x2) + v_perp_x1;<br>
+circle1->vy = c1*(dm*v_parallel_y1 + 2*m2*v_parallel_y2) + v_perp_y1;<br>
+circle2->vx = c1*(2*m1*v_parallel_x1 - dm*v_parallel_x2) + v_perp_x2;<br>
+circle2->vy = c1*(2*m1*v_parallel_y1 - dm*v_parallel_y2) + v_perp_y2;<br>
+</font>
+<p>
+This equation applies only in the case that the collision is completely elastic.  It is planned to add significant amounts of in-elasticity to the collisions, such that the final relative velocities would be significantly less.
+<p>
+<img src="images/physics3.jpg">
+<p>
+    <a name="Kicking_and_Dribbling"></a>
+    <h3><b><u>Kicking and Dribbling:</u></b></h3>
+<p>
+Kicking is accomplished by imparting a specified velocity on the ball in the direction the robot is facing, provided that the ball is sufficiently close to the front of the robot to receive a kick.  A kick counter is used to control how frequently the robot can kick.
+<p>
+Dribbling is somewhat hacked. If a ball touches a robot in the dribbling zone while dribbling is on, it will become attached, and will be dragged around (forced to attain a velocity that in theory keeps the ball exactly the same place in respect to the robot next timestep, despite any translational or rotational motion).
+
+ </body>
+</html>
+
+  
+
+  
+

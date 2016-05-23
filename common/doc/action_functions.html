@@ -1,0 +1,44 @@
+<html>
+ <head>
+ </head>
+ <body bgcolor="#FFFFFF" link="blue" alink="blue" vlink="blue">
+    <h2><b>Position Action Functions</b></h2>
+
+    <a name="What_is"></a>
+    <h3><b><u>What is a position action function?</u></b></h3>
+
+Action functions are called by plays for each robot position 
+that is present every frame. The action function for each robot 
+position runs the appropriate skill for that robot position provided the 
+state of the system and more importantly the current play. For example 
+while in the loose defense play, the blocker runs the tandemblocker skill. 
+<p>
+Action functions tend to be quite simple and straight forward since they often just 
+initialize and run one of a robots skills. However, in some plays our strategy may decide to 
+run one skill or another, so some simple checks can be found in the code.
+
+    <a name="Where_are"></a>
+    <h3><b><u>Where are position action functions located?</u></b></h3>
+<font color="red">
+robocup-ai-2002/positions/2002positions/position/p_playname.cpp/h</font><br>
+Each position has a separate action function defined for every play in a separate file in this
+ folder.
+
+
+    <a name="special_op"></a>
+    <h3><b><u>
+        Position Action Functions and Special Op Positions:
+    </u></b></h3>
+
+Special Op positions have dummy action functions. This is because special op
+positions are intended to be controlled by another position. The special op 
+creator is controlled by the creator, the special op defender is controlled by 
+the defender, and the special op aggressor is controlled by the aggressor. In the 
+controlling robot's action function a test is made to see if the appropriate special
+ op position is present, and if so it's proper skill is run by the controlling position. The
+ idea behind this is that special op positions are intended to augment or facilitate
+ other positions. By having the controlling robot instruct the special op what to do, it is
+ easier to facilitate team behavior.
+
+ </body>
+</html>

@@ -1,0 +1,108 @@
+<html>
+ <head>
+ </head>
+ <body bgcolor="#FFFFFF" link="blue" alink="blue" vlink="blue">
+  
+  <table border="0">  
+   <tr><td width="500">
+ 
+    <h2><b>Play: <font color="green">Remove Ball Defense</font></b></h2>    
+    <hr width="100%">
+    <a name="illustration"></a>
+    <h3><b><u>Description:</u></b></h3>
+This play is called when the blocker has possession of the ball in the
+defense zone. The central goal is for the blocker to then grab and
+chip-kick the ball to either the special op aggressor or aggressor which
+are placed behind the half line. The creator lies slightly farther upfield
+ready for a quick pass or drive upfield. The defender stays back, blocking
+opponents from interfering with the blocker.
+    
+    <h3><b><u>Illustration:</u></b></h3>
+    <img src="images/removeBallDefensePlay.jpg">
+
+    <a name="positionsPresent"></a>
+    <h3><b><u>Positions Present:</u></b></h3>
+    <ul>
+     <li>Blocker
+     <li>Defender
+     <li>Special Op Defender
+     <li>Aggressor
+     <li>Creator
+    </ul>
+
+    <a name="positionStrategies"></a>
+    <h3><b><u>Position Strategies:</u></b></h3>
+
+    <table border="1">
+     <tr>
+      <td width="500">
+       <h2><b><font color="green">Blocker:</font></b></h2>    
+       <ul>
+        <li>If ball is visible grab it!
+        <li>Decide to chip kick to aggressor or creator.
+        <li>Rotate to shoot at that point
+        <li>Chip kick ball to intended target, either aggressor or special op aggressor.
+       </ul>Blocker: <b>RemoveBallSkill</b>
+      </td>
+     </tr>
+     <tr>
+      <td width="500">
+       <h2><b><font color="green">Defender + Special Op Defender:</font></b></h2>    
+        Loose Screen closest opponents outside defense zone from blocker, allowing him to 
+        remove the ball more freely. Opponent must be in defense 
+        zone. If no such opponent exists go to center of this area. 
+General idea is to play loose defense, staying back and just in front of 
+the defense zone. This makes is harder for the opponent to juke around us 
+and score since in doing so they would have to enter the defense zone and 
+hopefully contact our blocker. <b>Defender plays on the opposite side of the field as the ball and the special op plays on the same side of the field as the ball.</b>
+
+<br><br>Defender: <b>RemoveBallScreenSkill</b><br>Special Op Defender: <b>RemoveBallScreenSkill</b>
+      </td>
+     </tr>
+     <tr>
+      <td width="500">
+       <h2><b><font color="green">Aggressor + Creator:</font></b></h2>    
+        Get open for chip shot on opposite sides of the field. Aggressor goes to 
+        side of field where ball is.<br><br>Aggressor: <b>LookForChipKickSkill</b><br>Creator: <b>LookForChipKickSkill</b>
+      </td>
+     </tr>
+    </table>
+    	
+    <a name="transitions"></a>
+    <h3><b><u>Transitions:</u></b></h3>
+    <hr>
+    <table border="0">
+     <tr>
+      <td width="100"><ul><li><a href="play_looseDefense.html">Loose Defense</a></ul></td>
+      <td>Once blocker triggers the chip kick, a timer is started, after 
+      the timer goes past a threshold we transition immediately to loose 
+defense. We also transition to loose defense if vision data indicates the 
+ball is significantly far away from the blocker.
+      </td>
+     </tr>
+    </table>
+    <hr>
+
+    <h3><b><u>Position Switching:</u></b></h3>
+    <hr>
+    <table border="0">
+     <tr>
+      <td width="100"><ul><li>SpecialOpDefender, Aggressor, Creator</ul></td>
+      <td><ul>
+           <li>If defender farther upfield than creator, switch
+           <li>If special op farther upfield than aggressor, switch
+           <li>Keep defender same side of the field as the ball
+           <li>Keep aggressor on same side of the field as the ball
+          </ul>
+      </td>
+     </tr>
+    </table>
+    <hr>
+
+
+    </ul>
+   </tr></td>
+  </table>
+
+ </body>
+</html>

@@ -1,0 +1,98 @@
+<html>
+ <head>
+ </head>
+ <body bgcolor="#FFFFFF" link="blue" alink="blue" vlink="blue">
+  
+  <table border="0">  
+   <tr><td width="500">
+ 
+    <h2><b>Play: <font color="green">Jam and Shoot</font></b></h2>    
+    <hr width="100%">
+    <a name="illustration"></a>
+    <h3><b><u>Description:</u></b></h3>
+Basic play that can be transitioned to from various places. If the
+aggressor has a good shot on goal, this play is called and the primary
+focus is to quickly convert to a shoot and score without the aid of other
+robots.
+
+    <h3><b><u>Illustration:</u></b></h3>
+    <img src="images/jamAndShootPlay.jpg">
+
+    <a name="positionsPresent"></a>
+    <h3><b><u>Positions Present:</u></b></h3>
+    <ul>
+     <li>Blocker
+     <li>Defender
+     <li>Aggressor
+     <li>Special Op Aggressor
+     <li>Creator
+    </ul>
+
+    <a name="positionStrategies"></a>
+    <h3><b><u>Position Strategies:</u></b></h3>
+
+    <table border="1">
+     <tr>
+      <td width="500">
+       <h2><b><font color="green">Blocker + Defender:</font></b></h2>
+       Work together cutting down shots in same fashion as described in <a href="play_looseDefense.html">Loose Defense</a>.
+       <br>Call <b>TandemBlockerSkill</b> and <b>TandemDefenderSkill</b>
+      </td>
+     </tr>
+     <tr>
+      <td width="500">
+       <h2><b><font color="green">Aggressor:</font></b></h2>
+        Runs through the ball to open goal spot, arming kicker continuously.
+        <br>Runs <b>JamAndShootSkill</b>
+      </td>
+     </tr>
+     <tr>
+      <td width="500">
+       <h2><b><font color="green">Special Op Aggressor:</font></b></h2>
+        Remains behind the aggressor, screening more dangerous opponent on same 
+side of field from behind.
+        <br>Runs <b>BehindScreenOffenseSkill</b>, clearly called by the aggressor's action function
+      </td>
+     </tr>
+     <tr>
+      <td width="500">
+       <h2><b><font color="green">Creator:</font></b></h2>
+        Gets open for a cross crease pass/rebound, looking at the ball.
+        <br>Calls <b>OppositeReboundOffenseSkill</b>
+      </td>
+     </tr>
+    </table>
+
+    <a name="transitions"></a>
+    <h3><b><u>Transitions:</u></b></h3>
+
+    <hr>
+    <table border="0">
+     <tr> 
+      <td width="100"><ul><li><a href="play_upfieldDefense.html">Upfield Defense</a></ul></td>
+      <td>Once aggressor has kicked the ball for a certain amount of time OR play timer 
+       has timed out.</td>
+     </tr>
+    </table>
+    <hr>
+
+   <h3><b><u>Position Switching:</u></b></h3>
+    <hr>
+    <table border="0">
+     <tr>
+      <td width="100"><ul><li>Aggressor, SpecialOpAggressor, Creator</ul></td>
+      <td><ul>
+	        <li>If somebody other than aggressor is one with the ball, switch with aggressor.
+			<li>keep special op behind the creator (along length of field)
+          </ul>
+      </td>
+     </tr>
+    </table>
+    <hr>
+
+    </ul>
+   </tr></td>
+  </table>
+
+ </body>
+</html>

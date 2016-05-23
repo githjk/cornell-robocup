@@ -1,0 +1,20 @@
+<html>
+ <head>
+ </head>
+ <body bgcolor="#FFFFFF" link="blue" alink="blue" vlink="blue">
+    <h2><b>Adding Timers to the System</b></h2>
+
+Timers are provided using the VisionTimer class, found in /common/modules/VisionTimer.cpp/h. The VisionTimer determines passing time by comparing present versus past final vision time stamps and calculating the time that has passed. This links the all timers in the AI to the Vision system and works very well if running in real time with a real vision system, or at another frame rate with the simulator. 
+<p>
+A VisionTimer (called 'timer') is provided in all skills and plays by the base skill/play classes. If additional timers are needed you can instantiate new VisionTimer objects. To instantiate a VisionTimer, you must pass the constructor a pointer to the Vision Module so the timer can get a handle on current and previous time stamps. 
+<p>
+Timers provide two methods for easy use:
+<ul>
+ <li><font color="blue">timer->resetTimer()</font> -- resets a timer.
+ <li><font color="blue">timer->getElapsedTime()</font> -- gets the time in seconds since the timer was last reset.
+</ul>
+<p>
+Resetting the timer records the finished timestamp from the current vision frame. Subsequent calls to getElapsedTime() returns the difference between the current final vision timestamp and the timers recorded timestamp. If the AI is not getting timestamped vision data (whenever the AI is not connected to the 
+vision system/simulator), Vision Timers will not increment.
+ </body>
+</html>

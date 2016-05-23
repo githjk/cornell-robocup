@@ -1,0 +1,257 @@
+<html>
+ <head>
+ </head>
+ <body bgcolor="#FFFFFF" link="blue" alink="blue" vlink="blue">
+    <h2><b>Networking</b></h2>
+
+
+    <a name="Relevant_Files"></a>
+    <h3><b><u>Relevant Files:</u></b></h3>
+<ul>
+ <li><b>Server Code:</b> Server.cpp, Server.h
+ <li><b>Client Code:</b> Client.cpp, client.h
+ <li><b>Core Networking Routines:</b> Socket.cpp, Socket.h
+ <li><b>Node Type Definition:</b> CommType.h
+</ul>
+
+    <a name="Architecture"></a>
+    <h3><b><u>Architecture:</u></b></h3>
+This year’s system is a TCP/IP-based server-client architecture based on Winsock (the standard Window’s network library).  In our setup, nodes have three possible designations: JUST_SEND, JUST_RECEIVE, and SEND_RECEIVE.  JUST_SEND is used for server nodes, JUST_RECEIVE, for clients, and SEND_RECIEVE designates a node which can act as both.  
+
+    <a name="Server_Side"></a>
+    <h3><b><u>Server Side:</u></b></h3>
+To instantiate a server, one must specify the type, the address, and port number the server is to be established with.  Once instantiated, the server sets up a listening socket on the specified port and creates a data structure for managing connections.  The server then starts a listener running on a separate thread so it is free to perform other tasks while also monitoring any connection requests.
+When a client requests a connection from the server, a handshake is initiated (standard TCP/IP) to confirm the connection.
+
+    <a name="Client_Side"></a>
+    <h3><b><u>Client Side:</u></b></h3>
+In order to establish a connection with the server, the client is first instantiated using the appropriate IP address and port number and the connection() method is called.  The client type and server type must match for a connection to open successfully.  For example if the server type and/or client type is not recognized or not an allowable configuration (senseless to have two JUST_SEND entities connect to each other), the connection will not be created.  If the connection succeeds, the client and server can communicate using the send() and receive() methods.
+
+    <a name="Connection_Oriented"></a>
+    <h3><b><u>Connection-oriented (TCP) Network Applications:</u></b></h3>
+    <table>
+     <tr>
+      <td><center><b>Server</b></center></td>
+      <td><center><b>Client</b></center></td>
+     </tr>
+     <tr>
+      <td colspan="2">
+       <center><img src="images/networking.jpg"></center>
+      </td>
+     </tr>
+    </table>
+
+    <a name="Details"></a>
+    <h3><b><u>Details:</u></b></h3>
+CommType is a structure that defines the communication mode the client or server can take on.  These modes include: duplex mode defined as SEND_RECEIVE, send-only mode defined as JUST_SEND, and receive-only mode defined as JUST_RECEIVE.  
+<p>
+Class Socket: Contains methods to set up a socket connection; open/close connection; send and receive data over the connection.  It is uses the Winsock library and provides the basic calls which are used by both client and server classes.
+In order to use this class, user should use ws2_32.lib when linking. This can be done by going to Project->Settings in Visual C++. Click on the Link tab and within Object/library modules, add the statement: “ws2_32.lib”
+<p>
+Method Details:
+<p>
+<font color="blue">Socket()</font><br>
+    Default constructor.  Creates a new Socket object
+<p>
+<font color="blue">bool openConnection( char* hostname, int port )</font><br>
+The method opens a connection when given a hostname and port number.
+<p>    
+    Input parameters:<br>
+    hostname: The hostname of the server<br>
+    port: port number of the server<br>
+<p>    
+    Return value: <br>
+    returns 1 if successful, 0 if failed<br>
+<p>
+<font color="blue">bool openListener( char* hostname, int port )</font><br>
+This method opens a listening socket using the given hostname and port number; it then binds the new socket and starts listening for an incoming connection.  Listeners are used to listen for incoming connection requests.
+<p>    
+    Input parameters:<br>
+    hostname: The hostname of the server<br>
+    port: port number of the server<br>
+<p>    
+    Return value: <br>
+    returns true if successful, false if failed<br>
+<p>    
+<font color="blue">bool isOpen()</font><br>
+    This method checks if a connection is currently open<br>
+<p>        
+    Return value:<br>
+    Return true if connected, false if not connected<br>
+<p>    
+<font color="blue">void close()</font><br>
+    This method closes a connection<br>
+<p>    
+<font color="blue">bool sendData( char* message, int size )</font><br>
+This method sends data over a socket connection.  It returns true if successful and returns false if:<br>
+1) the size of data sent is not the same as the size of actual data<br>
+    2) the connection is already closed <br>
+    <p>    
+    Input parameter:<br>
+    message: pointer to the message that would like to send<br>
+    size: size of the message<br>
+    <p>    
+    Return value:<br>
+    Return true if successful, false if failed<br>
+<p>    
+<font color="blue">bool receiveData( char* message, int size )</font><br>
+This method is used to receive data over a socket connection.  It returns true if the data is received correctly, and false if:<br>
+1) the size of data received is not the same as the size of actual data<br>
+    2) the connection is already closed <br>
+    <p>    
+    Input parameter:<br>
+message: pointer to buffer to the message that would like to receive<br>
+    size: size of the message<br>
+    <p>    
+    Return value:<br>
+    Return true if success, false if fail<br>
+<p>    
+<font color="blue">Socket* acceptConnection()</font><br>
+    This method accepts an incoming connection request<br>
+<p>    
+    Return value:<br>
+    Return a newly connected socket<br>
+<p>    
+<p>    
+Class Server: This class includes everything needed to create and use a Server. Methods include setting up a connection; listening and accepting incoming socket connections; sending and receiving data from different client types.  The methods are built from calls to the socket class.
+<p>    
+Method Details:
+<p>    
+<font color="blue">Server (CommType serverType, int MaxSend, int MaxReceive )</font><br>
+Constructor of the server class.  It takes in the type of server.  Possible types are defined in CommType.h and are as follows:<br>
+JUST_SEND: server that only sends data (e.g. Vision)<br>
+JUST_RECEIVE: server that only receives data<br>
+SEND_RECEIVE: server that both sends and receives data<br>
+<p>    
+Servers accept a certain max number of clients that can send and/or receive data<br>
+<p>    
+    Input parameter:<br>
+    serverType: Type of the server<br>
+MaxSend: store the max number of clients of type JUST_RECEIVE and SEND_RECEIVE<br>
+MaxReceive: store the max number of clients of type JUST_SEND and SEND_RECEIVE<br>
+<p>    
+<font color="blue">bool startListener( char* hostname, int port )</font><br>
+This method generates a thread to listen for connection requests.  A connection will be accepted if given the client satisfies both of the following conditions:<br>
+1) The server and client types are compatible<br>
+2) There are still available slots for the incoming client type.<br>
+It also checks if there is already a connection set up for the client.  If there is, the server ignores the new connection request and returns false.<br>
+   <p>    
+   Input parameter: <br>
+   Hostname: hostname of the server would like to connect to<br>
+Post: port number of the server client would like to connect to<br>
+   <p>    
+   Return value: <br>
+   Return true if successful, false if failed<br>
+<p>    
+<font color="blue">void listen()</font><br>
+This method is called by startListener() and it accepts connections from the listener socket and assigns them to the proper client index by calling the appropriate private methods –addSender(); <br>addReceiver() and addSenderReceiver():<br>
+<p>    
+1) For JUST_SEND client type, calls addSender()<br>
+2) For JUST_RECEIVE client type, calls addReceiver()<br>
+3) For SEND_RECEIVE client type, calls addSenderReceiver()<br>
+<p>    
+<font color="blue">void sendAll( void* message, int size )</font><br>
+This method sends data to all receiving clients, which includes JUST_RECEIVE and SEND_RECEIVE<br>
+<p>    
+    Input parameter:<br>
+message: pointer to buffer to the message that would like to receive<br>
+    size: size of the message<br>
+<p>    
+<font color="blue">bool send(int clientIndex, void* message, int size)</font><br>
+This method sends data to a particular client who has the given clientIndex value<br>
+    <p>    
+    Input parameter:<br>
+clientIndex: use to identity the client.  It is the index of the private variable - sendIndex[] array<br>
+message: pointer to buffer to the message that would like to send<br>
+    size: size of the message<br>
+    Return value:<br>
+    Return true if success, false if failed<br>
+ <p>    
+<font color="blue">bool receive(int clientIndex,void* message,int size)</font><br>
+This method receives data from a particular client who has the given clientIndex value<br>
+<p>    
+    Input parameter:<br>
+clientIndex: use to identity the client.  It is the index of the private variable - receiveIndex[] array<br>
+message: pointer to buffer to the message that would like to receive<br>
+    size: size of the message<br>
+    <p>    
+    Return value:<br>
+    Return true if successful, false if failed<br>
+<p>    
+<font color="blue">void setSendBuffer(int bufSize)</font><br>
+    This method set the size of the sender’s buffer.  The buffer size for RoboCup is not much of an issue since the typical amount of data which is sent in a packet is small, and considerably smaller than the default kernel buffer size of 8192.<br>
+    <p>    
+    Input parameter:<br>
+    bufSize: size of the buffer<br>
+<p>    
+<font color="blue">void setReceiveBuffer(int bufSize)</font><br>
+    This method set the size of the receiver’s buffer<br>
+    Input parameter:<br>
+    bufSize: size of the buffer<br>
+<p>    
+Class Client: This class includes everything needed to create and use a Client. Methods include setting up a connection; checking connection status; sending and receiving data.  The methods are built from calls to the socket class.<br>
+<p>    
+Method details:<br>
+<font color="blue">Client(CommType clientType)</font><br>
+The client constructor uses a default host address of 127.0.0.1 (loopback/localhost address) and port number 4545. <br>
+    <p>    
+    Input parameters: <br>
+clientType: defines the client’s communication mode by either SEND_RECEIVE, JUST_SEND or JUST_RECEIVE.  <br>
+<p>    
+<font color="blue">Client(CommType clientType, const char* hostname, int port)</font><br>
+This is a constructor to create Client with user-specified communication type and user-defined server address and port number.<br>
+    <p>    
+    Input parameter: <br>
+clientType: defines the client’s communication mode by SEND_RECEIVE, JUST_SEND and JUST_RECEIVE<br>
+    hostname: defines the address to connect to  <br>
+    port: defines the port number to connect to<br>
+    <p>    
+<font color="blue">bool openConnection()</font><br>
+This method opens a connection to communicate with the server having address defined as “Client->hostname” and port number as “Client->port”.  <br>
+    <p>    
+    Return Value:<br>
+Returns true if connection is opened successfully and false if the client type is rejected by the server or connection fails.      <br>
+<p>    
+<font color="blue">bool openConnection( const char* hostname, int port )</font><br>
+This method opens a connection to communicate with the specified server.  <br>
+    Input parameter:<br>
+    hostname: defines the server’s address<br>
+    port: defines the server’s port number<br>
+    Return Value:<br>
+Returns true if successful and false if open connection fails.<br>
+<p>    
+<font color="blue">bool isOpen()</font><br>
+This method checks if the client has opened a connection with a server.<br>
+    <p>    
+    Return Value:<br>
+Returns true if successful and false if open connection fails.<br>
+<p>    
+<font color="blue">void close()</font><br>
+    This method closes a client connection.<br>
+    Input parameter: None<br>
+    Return Value: None<br>
+<p>    
+<font color="blue">bool send( void* message, int size )</font><br>
+This method sends a message of the specified size to the server.  It also performs a check to ensure server is not in JUST_SEND mode.  <br>
+    <p>    
+    Input parameter:<br>
+    message: pointer to the message to be sent<br>
+    size: length of the message<br>
+  Return Value:<br>
+  Return true if data is sent and false if the server is    
+  defined to be in the send-only mode.<br>
+<p>    
+<font color="blue">bool receive( void* message, int size )</font><br>
+This method receives a message of the specified size from the server.  It also performs a check to ensure the server is not in the JUST_RECEIVE mode.<br>
+    Input parameter:<br>
+    message: pointer to the message to be received.<br>
+    size: length of the message	<br>
+    Return Value:<br>
+Return true if data is received and false if the server is defined to be in the JUST_RECEIVE mode.<br>  
+
+    <a name="Constraints"></a>
+    <h3><b><u>Constraints:</u></b></h3>
+Networking is one of many pieces whose combined time must be under 16.6ms so that our system is able to run at 60 frames per second.  Because our system is currently running on a 100Mb/s local Ethernet there negligible timing delays once our packets get to the wire.  It is important to have the Nagle algorithm switched off, since the Nagle algorithm clusters packets and prevents them from being sent immediately (it does so as to avoid the “silly window” syndrome which is more of a problem for networks with higher overall utilization).  Due to the real-time qualities of our domain, it is critical that we send packets as soon as possible, thus the Nagle algorithm should stay off.
+
+ </body>
+</html>

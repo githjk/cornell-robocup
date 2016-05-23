@@ -1,0 +1,148 @@
+<html>
+ <head>
+ </head>
+ <body bgcolor="#FFFFFF" link="blue" alink="blue" vlink="blue">
+  <h2><b>Modifications:</b></h2>
+  
+  <table border="0">
+   <!-- ############################## -->
+   <tr><td colspan="2"><hr></td></tr>
+   <tr>
+    <td valign="top"><center>4/13/2002</center></td>
+    <td><ul>
+    <li>In loose defense, if Op1 does not have a lane between him and the ball, special op should just play shot-block on op2.
+    </ul></td>
+   </tr>   
+   <!-- ############################## -->
+   <tr><td colspan="2"><hr></td></tr>
+   <tr>
+    <td valign="top"><center>4/12/2002</center></td>
+    <td><ul>
+    <li>Fixed cage defense play to refer to goalie box, not the defense zone, when determining what blocker does when grabbing and
+        retreating with the ball.
+    <li>special op default position changed in loose defense for a few reasons. First, by placing him on the other side of the field we spread
+our robots out a little. Second, it is impossible to score on us by bouncing the ball off the special op in his new location. Old location was BAD.
+    <li>Explicitly stated that special op must remain offset while behind aggressor in upfield defense so as to catch stray knocked balls. Also stated that
+BehindScreenOffense should not screen opponents too far away or too close to aggressor.
+    <li>In tight defense, special op should behind in same was as in loose defense if no opponents are around. Default position is on opposite 
+side of field in sweet sector, defense zone, splitting angle between ball and center of opponent goal.
+    </ul></td>
+   </tr>   
+   <!-- ############################## -->
+   <tr><td colspan="2"><hr></td></tr>
+   <tr>
+    <td valign="top"><center>4/11/2002</center></td>
+    <td><ul>
+    <li>Defender always plays off blocker in tight defense, never handles opponents in consideration zone any more.
+	<li>Added documentation re position switching in every play.
+	<li>In remove ball defense, fixed image and documentation re the special op and the defender. The defender plays on the
+	    opposite side of the field as the ball. Makes transitions much smoother this way.
+    </ul></td>
+   </tr>   
+   <!-- ############################## -->
+   <tr><td colspan="2"><hr></td></tr>
+   <tr>
+    <td valign="top"><center>2/4/2002</center></td>
+    <td><ul>
+    <li>Started filling in schedule. First 4 weeks already filled in. 
+    <li>Moved play descriptions into play pages.
+    </ul></td>
+   </tr>   
+   <!-- ############################## -->
+   <tr><td colspan="2"><hr></td></tr>
+   <tr>
+    <td valign="top"><center>2/3/2002</center></td>
+    <td><ul>
+    <li>Added list of skills necessary to be written and development 
+timeline (unfilled).
+    </ul></td>
+   </tr>   
+   <!-- ############################## -->
+   <tr><td colspan="2"><hr></td></tr>
+   <tr>
+    <td valign="top"><center>2/1/2002</center></td>
+    <td><ul>
+    <li>Moved two opponent robots down to be in front of our goal in 
+        remove ball defense figure.
+    <li>Moved creator down to receive a chip kick and moved the special op 
+        down to help defend in case the chip kick is blocked in illustration.
+    <li>Moved two opponent robots down to in front of the cage in the cage 
+defense illustration.
+    <li>Updated remove ball defense play to have a special op defender 
+(not special op aggressor), have the creator come down to receive a chip 
+kick with the aggressor, and have the special op defender work with the 
+defender playing loose defense (staying back by the defense zone). 
+    <li>Modified transition from remove ball defense to loose defense to 
+also occur when vision data indicates the ball has traveled significantly 
+far away from the blocker.
+    <li>Added two way transition between loose defense and cage 
+defense. Also fixed transitions to tight defense from loose and cage 
+defense to be worded properly. 
+    <li>In tight defense, noted that blocker should split 4cm of defense 
+zone he does not cover in half, 2cm on either side, thus resolving a 
+number of issues with cross crease passes, getting stuck, and having a 
+shot on goal between him and the post.
+    <li>Changed special op defender in loose defense to remove opponents 
+who are beyond a grace distance behind the ball, thus allowing opponents 
+that are slightly behind the ball but still a great threat to be 
+shot-blocked.
+    <li>Added notes section to overview page and added note that 
+hysteresis will be used for play transitions.
+    <li>Fixed Special Op Creator and Creator to always look toward ball in 
+double pick offense.
+    <li>Modified special op aggressor in single assist to have a more 
+defined role. When aggressor behind imaginary line run screens or picks. 
+When aggressor moves past this line (x-coord) then fall back and get ready 
+to pick up the ball if it gets knocked behind the aggressor.
+    <li>In single assist offense, allow the aggressor to pass to the 
+creator if a pass is possible.
+    <li>In creator assist offense, shifted the man on the aggressor to the 
+right and the man on the special op left to emphasize the scenario where 
+the creator could shoot on goal where as the remaining players could not 
+(previously the aggressor would have shot on goal since he could).
+    <li>Rotated aggressor to look directly towards the creator in the 
+cross crease pass in the illustration.
+    <li>In positions list for loose defense, fixed special op aggressor to 
+be special op defender, stupid typo
+    <li>Added a new play! Upfield Defense! This helps avoid having the 
+special op from running back and forth between the upfield and the 
+back field, especially since he's needed to back up the aggressor much more 
+when the ball is loose upfield.
+    <li>Changed touch shoot and jam and shoot plays to transition to upfield defense, not loose defense.
+    <li>Added various notes to the bottom of the overview.
+    </ul></td>
+   </tr>
+   <!-- ############################## -->
+   <tr><td colspan="2"><hr></td></tr>
+   <tr>
+    <td valign="top"><center>1/30/2002</center></td>
+    <td><ul>
+    <li>Added overview page
+    <li>Spell checked entire playbook
+    </ul></td>
+   </tr>
+   <!-- ############################## -->
+   <tr><td colspan="2"><hr></td></tr>
+   <tr>
+    <td valign="top"><center>1/29/2002</center></td>
+    <td><ul>
+    <li>Filled in all the transitions
+    <li>Minor rotate on special op in tight defense so he doesn't play 
+against us (his rotation previously allowed a stray ball to bounce into 
+our goal.)
+    </ul></td>
+   </tr>
+   <!-- ############################## -->
+   <tr><td colspan="2"><hr></td></tr>
+   <tr>
+    <td valign="top"><center>1/25/2002</center></td>
+    <td><ul>
+    <li>Mostly complete first version!
+    </ul></td>
+   </tr>	
+   <!-- ############################## -->
+   <tr><td colspan="2"><hr></td></tr>
+  </ul>
+
+ </body>
+</html>

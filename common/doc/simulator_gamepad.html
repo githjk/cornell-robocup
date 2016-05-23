@@ -1,0 +1,60 @@
+<html>
+ <head>
+ </head>
+ <body bgcolor="#FFFFFF" link="blue" alink="blue" vlink="blue">
+    <h2><b>Game Pad</b></h2>
+	<!-- Description -->
+
+	<a name="description">
+ 		<h3><u><b> Description: </b></u></h3>
+	</a>
+
+	<p>
+		The GamePad for Simulator (joyPad) is a modification of a previous version of the GamePad that allowed manual control of robots.  This version of GamePad is designed to perform the same function, by allowing manual control of a robot in the simulator.
+	</p>
+
+	<!-- Design Overview -->
+	<br>
+	<a name="overview">
+		<h3><u><b> Design Overview: </b></u></h3>
+	</a>
+
+	<p>
+		The GamePad for Simulator is a modification of a previous version of GamePad written by Matt Harren in 2001.  The original version connected directly to the wireless module.  In this version of GamePad, we are connecting it to the simulator by emulating the AI command packets.  
+	</p>
+	<p>
+		Every possible instruction from the user is translated into velocities for the robot.  These velocities are packaged into an AI command, which is then sent to the simulator.  The commands sent to the simulator are processed to ensure that the maximum velocity in any direction does not exceed the maximum velocity of the robot.  
+	</p>
+	<p>
+This AI command packet is sent using the 2002 networking code.  Once connected to the simulator, the simulator will assume that it is communicating with the AI and execute those commands on the specified robots.  
+	</p>
+
+
+	<!-- Implementation -->
+	<br>
+	<a name="implementation">
+		<h3><u><b> How to Use: </b></u></h3>
+	</a>
+
+	<p>
+		The GamePad is a stand alone program that is executed separately.  Extract the code from CVS, open gamepadAI.dsp, and compile.  Follow the instructions on the screen to control the robots.
+	</p> 
+
+	<!-- Additional Resources -->
+
+	<a name="resources">
+		<h3><u><b> Additional Resources: </b></u></h3>
+	</a>
+
+	<li>
+		CVS - robocup-ai-2001 -> gamePad
+	</li>
+
+
+ </body>
+</html>
+
+  
+
+  
+

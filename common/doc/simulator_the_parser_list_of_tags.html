@@ -1,0 +1,425 @@
+<HTML>
+<HEAD>
+<TITLE>RoboCup Simulation Tags</TITLE>
+</HEAD>
+<BODY BGCOLOR="#FFFFFF">
+
+<FONT COLOR="#0000AA"><H1>RoboCup Simulation Tag Proposal</H1></FONT>
+
+<p>
+These tags have been carefully chosen to reflect the object-oriented 
+architecture of the simulation.  The tags revolve completely around the 
+objects which are being simulated, rather than focusing on GUI and such 
+non-simulation related appurtenances.  This allows humans to easily read, 
+understand, and modify the XML files without constantly referencing the 
+documentation.  Great care has been taken to choose logical tag names, and 
+to utilize the conventions that you presented in the earlier draft.
+</p>
+
+<p>
+Design Paradigms of the Tag System:
+<UL>
+	<LI>Tags must be logical.</LI>
+	<LI>Tags must be consistent.</LI>
+	<LI>Tags must be an English word or English words connected by 
+	underscores.</LI>
+	<LI>Tags must be closely tied to the underlying objected model of the 
+	system.</LI>
+	<LI>This tag system is designed as purely data format.  No directives to 
+	the program exist within. (i.e. it is not scripting)</LI>
+	<LI>Inheritance and templates can be used to promote brevity.</LI>
+
+</UL>
+
+
+
+
+
+<these_are_considered_to_be_frozen>
+
+<H2>Main Tags</H2>
+
+<FONT COLOR="#CC0000"><H3>&lt;parameter_file&gt;</H3></FONT>
+<p>
+	This is the root tag.  It contains simulation worlds.
+</p>
+<p>
+	<b>Contains:</b>
+	<UL>
+		<LI>sim_world</LI>
+		<LI>COMMENT</LI>
+	</UL>
+<p>
+
+<BR>
+<FONT COLOR="#CC0000"><H3>&lt;sim_world&gt;</H3></FONT>
+<p>
+	This tag represents a self-contained simulated environment, and contains 
+	all tags of its constituents.
+</p>
+<p>
+	<b>Attributes</b>:
+	<UL>
+		<LI>name   - the name of the simulation world (for GUI)</LI>
+		<LI>x_size - length in <i>meters</i> of the simulation world.</LI>
+		<LI>y_size - width in <i>meters</i> of the simulation world.</LI>
+		<LI>z_size - height in <i>meters</i> of the simulation world.</LI>
+		<LI>in_latency - latency in number of frames for AI-sim communication.</LI>
+		<LI>out_latency - latency in <i>number </i>of frames for sim-AI
+          communication.</LI>
+		<LI>frame_rate - Frame rate at which the simulator runs.</LI>
+		<LI>noise_radius - A parameter for simulating noise in the simulator</LI>
+	</UL>
+<p>
+	<b>Contains:</b>
+	<UL>
+		<LI>field,decoration,wall,robot,ball,goal,geometry,COMMENT</LI>
+	</UL>
+
+<HR>
+<BR>
+
+<H2>Object Attribute Tags</H2>
+
+<FONT COLOR="#CC0000"><H3>&lt;geometry&gt;</H3></FONT>
+<p>
+	Every physical object contains a geometry tag.  This describes the 
+	geometry of the object.
+</p>
+<p>
+	<b>Attributes</b>:
+	<UL>
+		<LI>start_position - initial position in <i>meters</i> of the object. [x,y,z]</LI>
+		<LI>start_velocity - initial velocity in <i>meters/sec</i> of the object.
+          [x,y,z]&nbsp;</LI>
+	</UL>
+<p>
+	<b>Contains:</b>
+	<UL>
+		<LI>shape, COMMENT</LI>
+	</UL>
+
+<FONT COLOR="#CC0000"><H3>&lt;shape&gt;</H3></FONT>
+<p>
+    &nbsp;This describes the shape of the object.
+</p>
+<p>
+	<b>Contains:</b>
+	<UL>
+		<LI>line, circle, rectangle, Plane, arc</LI>
+	</UL>
+
+	
+
+<FONT COLOR="#CC0000"><H3>&lt;appearance&gt;</H3></FONT>
+<p>
+	Any object in the program that can be viewed by the GUI has an appearance 
+	tag.  This tag contains attributes and other tags which provide 
+	information to the GUI about what the object should look like. This is
+    currently not implemented. It can be used in future if we plan to integrate
+    a GUI with the simulator.
+</p>
+<p>
+	<b>Attributes</b>:
+	<UL>
+		<LI>fill_color - color to fill in inside of object with.</LI>
+		<LI>edge_color - color to draw around edges with.</LI>
+		<LI>edge_thickness - thickness of edges in <b>pixels</b>.</LI>
+	</UL>
+<p>
+	<b>Contains:</b>
+	<UL>
+		<LI>COMMENT</LI>
+	</UL>
+
+<HR>
+<BR>
+	
+<H2>Object Tags</H2>
+
+<FONT COLOR="#CC0000"><H3>&lt;robot&gt;</H3></FONT>
+<p>
+	This defines a robot and all of its characteristics.
+</p>
+<p>
+	<b>Attributes</b>:
+	<UL>
+		<LI>name - the name of the robot. (for debugging/logging purposes)</LI>
+		<LI>id   - unique identification number used in communication with the AI. 
+		Negative means it doesn't exist in the simulation, is only a template.</LI>
+		<LI>team - the team of the robot. (for better description)</LI>
+		<LI>mass - the mass of the robot</LI>
+		<LI>elasticity - the elasticity of the robot.</LI>
+		<LI>inherits - the name of the robot from which properties are inherited.</LI>
+	</UL>
+<p>
+	<b>Contains:</b>
+	<UL>
+		<LI>appearance</LI>
+		<LI>geometry</LI>
+		<LI>dribbler</LI>
+		<LI>kicker</LI>
+		<LI>COMMENT</LI>
+	</UL>
+
+<BR>
+
+<FONT COLOR="#CC0000"><H3>&lt;wall&gt;</H3></FONT>
+<p>
+	This defines a wall and all of its characteristics.
+</p>
+<p>
+	<b>Attributes</b>:
+	<UL>
+		<LI>name - unique identifying name.  If it ends with "_TEMPLATE" it is only 
+		a template, and is not instantiated.</LI>
+		<LI>elasticity - The elasticity of the wall</LI>
+		<LI>inherits - the name of the wall from which properties are inherited.</LI>
+	</UL>
+<p>
+	<b>Contains:</b>
+	<UL>
+		<LI>appearance</LI>
+		<LI>geometry</LI>
+		<LI>COMMENT</LI>
+	</UL>
+
+<BR>
+
+<FONT COLOR="#CC0000"><H3>&lt;goal&gt;</H3></FONT>
+<p>
+	This defines a goal and all of its characteristics.
+</p>
+<p>
+	<b>Attributes</b>:
+	<UL>
+		<LI>team - this is 0 or 1, depending on what team owns the goal.</LI>
+		<LI>inherits - the name of the wall from which properties are inherited.</LI>
+	</UL>
+<p>
+	<b>Contains:</b>
+	<UL>
+		<LI>appearance</LI>
+		<LI>geometry</LI>
+		<LI>COMMENT</LI>
+	</UL>
+
+<BR>
+
+<FONT COLOR="#CC0000"><H3>&lt;field&gt;</H3></FONT>
+<p>
+	This defines the playing field and all of its characteristics.
+</p>
+<p>
+	<b>Attributes</b>:
+	<UL>
+		<LI>static_friction - the coefficient of static friction of the surface.</LI>
+		<LI>kinetic_friction - the coefficient of kinetic friction of the surface.</LI>
+		<LI>elasticity - the fraction of energy conserved in collisions.</LI>
+		<LI>inherits - the name of the wall from which properties are inherited.</LI>
+	</UL>
+<p>
+	<b>Contains:</b>
+	<UL>
+		<LI>appearance</LI>
+		<LI>geometry</LI>
+		<LI>COMMENT</LI>
+	</UL>
+	
+<BR>
+
+<FONT COLOR="#CC0000"><H3>&lt;ball&gt;</H3></FONT>
+<p>
+	This defines a ball and all of its characteristics.
+</p>
+<p>
+	<b>Attributes</b>:
+	<UL>
+		<LI>mass - the mass of the ball.</LI>
+		<LI>name - the name of the ball (RoboFlag)</LI>
+		<LI>id - the id of ball (RoboFlag)</LI>
+		<LI>team - the team of the ball (RoboFlag)</LI>
+		<LI>static_friction - the coefficient of static friction.</LI>
+		<LI>kinetic_friction - the coefficient of kinetic friction.</LI>
+		<LI>elasticity - the fraction of energy conserved in collisions.</LI>
+		<LI>inherits - the name of the wall from which properties are inherited.</LI>
+	</UL>
+<p>
+	<b>Contains:</b>
+	<UL>
+		<LI>appearance</LI>
+		<LI>geometry</LI>
+		<LI>COMMENT</LI>
+	</UL>
+	
+<BR>
+
+
+<FONT COLOR="#CC0000"><H3>&lt;decoration&gt;</H3></FONT>
+<p>
+	This is used to define decorations that are visible in the GUI but do not 
+	have any effect on the physical system. This is not implemented yet.
+</p>
+<p>
+	<b>Attributes</b>:
+	<UL>
+		<LI>none</LI>
+	</UL>
+<p>
+	<b>Contains:</b>
+	<UL>
+		<LI>appearance</LI>
+		<LI>geometry</LI>
+	</UL>
+	
+
+<HR>
+	
+
+<H2>Shape Tags</H2>
+
+<FONT COLOR="#CC0000"><H3>&lt;line&gt;</H3></FONT>
+<p>
+	This gives a linear geometry to an object.
+</p>
+<p>
+	<b>Attributes</b>:
+	<UL>
+		<LI>length  - the length of the line.</LI>
+		<LI>angle   - the orientation of the line counterclockwise from &icirc;.</LI>
+	</UL>
+<p>
+	<b>Contains:</b>
+	<UL>
+		<LI>COMMENT</LI>
+	</UL>
+
+<BR>
+
+<FONT COLOR="#CC0000"><H3>&lt;plane&gt;</H3></FONT>
+<p>
+	This gives a planar geometry to an object.
+</p>
+<p>
+	<b>Attributes</b>:
+	<UL>
+		<LI>length  - the length of the plane.</LI>
+		<LI>width   - the width of the plane.</LI>
+		<LI>normalangle - the angle between the X-Y plane and the normal of the
+          plane.</LI>
+	</UL>
+<p>
+	<b>Contains:</b>
+	<UL>
+		<LI>COMMENT</LI>
+	</UL>
+
+<BR>
+
+
+<FONT COLOR="#CC0000"><H3>&lt;circle&gt;</H3></FONT>
+<p>
+	This gives a circular geometry to an object.
+</p>
+<p>
+	<b>Attributes</b>:
+	<UL>
+		<LI>radius  - the radius of the circle.</LI>
+		<LI>orientation - to indicate the mouth of the circle.</LI>
+	</UL>
+<p>
+	<b>Contains:</b>
+	<UL>
+		<LI>COMMENT</LI>
+	</UL>
+
+<BR>
+
+
+<FONT COLOR="#CC0000"><H3>&lt;arc&gt;</H3></FONT>
+<p>
+	This gives is a semicircular geometry.  It is used for decorations only.
+</p>
+<p>
+	<b>Attributes</b>:
+	<UL>
+		<LI>radius  - the radius of the semi circle.</LI>
+		<LI>begin_angle  - the starting angle of the semi circle counterclockwise from 
+		&icirc;.</LI>
+		<LI>end_angle  - the ending angle of the semi circle counterclockwise from 
+		&icirc;.</LI>
+	</UL>
+<p>
+	<b>Contains:</b>
+	<UL>
+		<LI>COMMENT</LI>
+	</UL>
+
+<BR>
+
+
+<FONT COLOR="#CC0000"><H3>&lt;rectangle&gt;</H3></FONT>
+<p>
+	This represents a rectangular prism.
+</p>
+<p>
+	<b>Attributes</b>:
+	<UL>
+		<LI>length  - the length of the rectangular prism.</LI>
+		<LI>width   - the width of the rectangular prism.</LI>
+		<LI>height  - the height of the rectangular prism.</LI>
+		<LI>orientation - the orientation of the rectangular prism</LI>
+	</UL>
+<p>
+	<b>Contains:</b>
+	<UL>
+		<LI>COMMENT</LI>
+	</UL>
+
+<HR>
+<BR>
+
+
+<H2>Robot Devices Tags</H2>
+
+<FONT COLOR="#CC0000"><H3>&lt;kicker&gt;</H3></FONT>
+<p>
+	This is the kicking mechanism mounted on the robots.
+</p>
+<p>
+	<b>Attributes</b>:
+	<UL>
+		<LI>kick_impulse - impulse imparted on the ball, in <i>newton-seconds</i></LI>
+		<LI>reset_time   - time taken to reset the mechanism, in <i>seconds</i></LI>
+	</UL>
+<p>
+	<b>Contains:</b>
+	<UL>
+		<LI>shape&nbsp;</LI>
+	</UL>
+
+<BR>
+
+<FONT COLOR="#CC0000"><H3>&lt;dribbler&gt;</H3></FONT>
+<p>
+	This is the dribbling mechanism mounted on the robots.
+</p>
+<p>
+	<b>Attributes</b>:
+	<UL>
+		<LI>stickiness - The stickiness of the dribbler</LI>
+	</UL>
+<p>
+	<b>Contains:</b>
+	<UL>
+		<LI>&nbsp;shape&nbsp;</LI>
+	</UL>
+
+<BR>
+
+
+<BR>
+
+<H6>&copy;February 4'th, 2002.</H6>
+</BODY>
+</HTML>

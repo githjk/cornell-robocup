@@ -1,0 +1,172 @@
+<html>
+ <head>
+ </head>
+ <body bgcolor="#FFFFFF" link="blue" alink="blue" vlink="blue">
+  
+  <table border="0">  
+   <tr><td width="500">
+    <h2><b>Play: <font color="green">Single Assist Offense</font></b></h2>    
+    <h3><b><u>Description:</u></b></h3>
+Single assist is the primary offensive play of the system and is the first
+to be called once any of our robots (excluding the blocker) gets possession
+of the ball. The primary objective is moving the ball up the field with
+the aggressor using dribbling and juking techniques. This play will always
+branch to one of the various other offensive plays once a timer has run
+out.
+
+
+    <h3><b><u>Illustration:</u></b></h3>
+    <img src="images/singleAssistOffensePlay.jpg">
+
+    <a name="positionsPresent"></a>
+    <h3><b><u>Positions Present:</u></b></h3>
+    <ul>
+     <li>Blocker
+     <li>Defender
+     <li>Aggressor
+     <li>Special Op Aggressor
+     <li>Creator
+    </ul>
+
+    <a name="positionStrategies"></a>
+    <h3><b><u>Position Strategies:</u></b></h3>
+
+    <table border="1">
+     <tr>
+      <td width="500">
+       <h2><b><font color="green">Blocker + Defender:</font></b></h2>
+       Work together cutting down shots in same fashion as described in <a href="play_looseDefense.html">Loose Defense</a>.
+       <br>Call <b>TandemBlockerSkill</b> and <b>TandemDefenderSkill</b>
+      </td>
+     </tr>
+     <tr>
+      <td width="500">
+       <h2><b><font color="green">Aggressor:</font></b></h2>
+       Advance ball upfield by whatever means necessary:
+       <ul>
+        <li>Primarily use <font color="green">dribblePoint</font> to 
+advance ball to point on same side of field, however, more heuristics may 
+incorporate numbers of robots on either side of field upfield and make 
+more proper decision.
+        <li>When dribbling becomes frustrated use dribble around pick 
+or juke skills.
+        <li>As described by transitions, may decide to work closer with 
+creator and special op creator/aggressor either with picks, passes, or 
+transition to jam and shoot to directly score.
+        <li>If creator is open for a upfield pass then pass to him.
+       </ul>
+       <br>Call <b>AdvanceBallUpfieldSkill</b>
+      </td>
+     </tr>
+     <tr>
+      <td width="500">
+       <h2><b><font color="green">Special Op Aggressor:</font></b></h2>
+       Move up along with the aggressor. Either run strong arm offense 
+skill or screen on attacking opponents. Always looking back at Aggressor 
+for a quick dish-pass. When opponents get near, set up picks. Once 
+aggressor moves past an imaginary line (x-cord) special op should fall back 
+and travel just behind the aggressor. This opens up space for shots and 
+dribbling for the aggressor since room will be limited, as well as sets 
+the special op to become the aggressor if the ball gets knocked just 
+behind the aggressor.
+       <br>Aggressor's action function will either call <b>StiffarmOffenseSkill</b> or <b>BehindScreenOffenseSkill</b>
+      </td>
+     </tr>
+     <tr>
+      <td width="500">
+       <h2><b><font color="green">Creator:</font></b></h2>
+       Get open for forward pass on opposite side of field as aggressor. 
+Always be prepared to fall forward for cross-crease pass.
+       <br>Call <b>CreatorLookForwardPassSkill</b>
+      </td>
+     </tr>
+    </table>
+
+    <a name="transitions"></a>
+    <h3><b><u>Transitions:</u></b></h3>
+   
+    <hr>
+    <table border="0">
+     <tr>
+      <td width="100"><ul><li><a href="play_doublePickOffense.html">Upfield Defense</a></ul></td>
+      <td>If we no longer have possession of the ball, then transition to upfield defense.
+      </td>
+     </tr>
+    </table>
+
+
+    <hr>
+    <table border="0">
+     <tr>
+      <td width="100"><ul><li><a href="play_doublePickOffense.html">Double Pick Offense</a></ul></td>
+      <td>After ball moves into the offensive zone a timer begins. Once the timer goes past a 
+threshold and the play is still running it will immediately transition to Double Pick 
+Offense if there exist 2 opponents between the ball and the opponent goal, neither of which 
+is in the opponent defense zone (thus excluding the opponent blocker), and are between the 
+split line and the side line closer to the ball. This constraint ensures that if the play 
+does transition that there will exist to opponents that the special op creator and creator 
+can pick and leave open the other half of the field for the aggressor to take the ball up 
+through.
+      </td>
+     </tr>
+    </table>
+    <hr>
+    <table border="0">
+     <tr>
+      <td width="100"><ul><li><a href="play_creatorAssistOffense.html">Creator Assist Offense</a></ul></td>
+      <td>Refer to the transition to Double Pick Offense, however, if the constraint does not 
+hold for a double pick when the timer passes the threshold, transition to Creator Assist 
+Offense since a double pick would not be helpful.</td>
+     </tr>
+    </table>
+    <hr>
+    <table border="0">
+     <tr>
+      <td width="100"><ul><li><a href="play_jamAndShoot.html">Jam and Shoot</a></ul></td>
+      <td>If there is a clear shot from the aggressor's current position on the goal.
+      </td>
+     </tr>
+    </table>
+    <hr>
+    <table border="0">
+     <tr>
+      <td width="100"><ul><li><a href="play_crossCreasePass.html">Cross Crease Pass</a></ul></td>
+      <td>If the timer has not run out, the creator signals he is open for a pass, and the 
+only movement would require a small rotation and very small lateral movement.
+      </td>
+     </tr>
+    </table>
+    <hr>
+    <table border="0">
+     <tr>
+      <td width="100"><ul><li>Quick Back Pass</ul></td>
+      <td>No transition yet, this is an extension play we'll develop later time permitting. 
+The basic idea is that the aggressor passes to another robot, who immediately kicks it right 
+back to him. Meanwhile the opponents run over in the wrong direction and we use their 
+filtering/poor prediction against them, rushing around upfield in the opposite direction.
+      </td>
+     </tr>
+    </table>
+    <hr>
+
+
+   <h3><b><u>Position Switching:</u></b></h3>
+    <hr>
+    <table border="0">
+     <tr>
+      <td width="100"><ul><li>Aggressor, SpecialOpAggressor, Creator</ul></td>
+      <td><ul>
+		    <li>If special op farther upfield than creator, switch
+			<li>If creator or special op has possession of the ball and the aggressor does not, 
+				switch with aggressor.
+          </ul>
+      </td>
+     </tr>
+    </table>
+    <hr>
+
+   </tr></td>
+  </table>
+
+ </body>
+</html>

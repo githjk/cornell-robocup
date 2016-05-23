@@ -1,0 +1,23 @@
+<html>
+ <head>
+ </head>
+ <body bgcolor="#FFFFFF" link="blue" alink="blue" vlink="blue">
+    <h2><b>Play Transitioning</b></h2>
+
+    <a name="Motivations"></a>
+    <h3><b><u>Motivations:</u></b></h3>
+
+In the past each play had code that ran every executed frame that transitioned to various other plays. While this worked in principle, checks for play transitions were all over the place, and no provisions were made to turn on and off play transitioning. In addition the decentralized notion of the checks made tracking down bugs in transitioning code difficult. This year we created a new black box to handle play transitioning that is run at the end of every frame in the strategy module. This box can be turned on and off easily, allows transitions to be defined later when necessary for any plays, while allowing plays to provide no transitions and write no transition functions at all when first developed. Lastly the transitioning code is all in a centralized location.
+
+    <a name="Transition_Object"></a>
+    <h3><b><u>Play Transition Object:</u></b></h3>
+
+The play transitioning object performs all play transition checks. When run, the play transitioning object calls the corresponding executePlayTransition function for the current play if defined. For example, if the current play is looseDefense, the executePlayTransition function for loose defense is called. If the requirements for any of the defined transitions are met this function changes the current play to the next. The play transitioning object is created in the strategy module, and the execute method is run after all strategy code is executed every frame.
+
+    <a name="Documentation"></a>
+    <h3><b><u>Documented Transitions:</u></b></h3>
+
+All play transitions for the 2002 strategy are documented in the 2002 playbook. At the end of any play the transitions to the other various plays are explained in detail, in the order in which they are tested.
+
+ </body>
+</html>

@@ -1,0 +1,73 @@
+<html> 
+ <head> 
+ </head> 
+ <body bgcolor="#FFFFFF" link="blue" alink="blue" vlink="blue">    
+  <table border="0">     <tr><td width="500">    
+   <h2><b>Play: <font color="green">Cage Defense</font></b></h2>        
+   <h3><b><u>Description:</u></b></h3>
+   This play is called when we are in the worst possible scenario: 
+   the ball is in both the death zone and the middle sector. This is one of 
+   the weakest situations in this years competition, for the most part due to the 
+   increased goal width and overall field width. The defender and aggressor 
+   form a cage around the blocker, allowing the blocker to obtain possession 
+   of the ball. The special op defender blocks interfering opponents while 
+   the creator stays farther upfield, hopefully keeping a few opponents with 
+   him and out of the action.    
+   <h3><b><u>Illustration:</u></b></h3>    
+    <img src="images/cageDefensePlay.jpg">    
+	<a name="positionsPresent"></a>    
+	<h3><b><u>Positions Present:</u></b></h3>    
+	<ul>    
+	 <li>Blocker  
+     <li>Defender   
+     <li>Special Op Defender  
+     <li>Aggressor   
+     <li>Creator   
+    </ul>  
+    <a name="positionStrategies"></a> 
+     <h3><b><u>Position Strategies:</u></b></h3> 
+      <table border="1">  
+       <tr>     
+        <td width="500"> 
+	     <h2><b><font color="green">Blocker:</font></b></h2>    
+          <ul>     
+   	       <li>Ball Free -> <font color="red">Blocker Approaches Ball</font>  
+		   <li>Blocker has possession ->
+		 <font color="red">Obtain Full Control:</font>         <ul>          <li>If outside goalie box -> <font color="red">Retreat with ball into defense zone</font>          <li>Once inside goalie box -> <font color="red">Grab ball</font>          <li>Inside and holding ball -> <font color="green">Transition to <b>Remove Ball Defense</b></font>         </ul>        <li>Opponent has possession -> Get in opponents face, match y-coordinate of ball       </ul>
+       <br>All of the above covered by calling <b>BlockerGainPossessionSkill</b>      </td>     </tr>     <tr>      <td width="500">      <h2><b><font color="green">Aggressor:</font></b></h2>           <ul>        <li>Form cage on outside edge (farther away from center of the field) as indicated in diagram, staying out of defense zone.
+       </ul>
+       <br>Call <b>AggressorCageDefenseSkill</b>      </td>     </tr>     <tr>      <td width="500">      <h2><b><font color="green">Defender:</font></b></h2>           <ul>        <li>Form cage on inside edge (closer to center of the field) as indicated in diagram, staying out of goalie box.
+       </ul>       <br>Call <b>DefenderCageDefenseSkill</b>      </td>     </tr>     <tr>      <td width="500">      <h2><b><font color="green">Special Op Defender:</font></b></h2>           <ul>        <li>Screens most dangerous opponent (closest to the ball) who does not have possession outside of the death zone.
+       </ul>
+      <br>Call <b>SpecialOpCageDefenseSkill</b> (which in turn uses SimpleScreenSkill)      </td>     </tr>     <tr>      <td width="500">      <h2><b><font color="green">Creator:</font></b></h2>           <ul>        <li>Get open for forward pass/kick in middle or offense zones.
+       </ul>
+       <br>Call <b>LookForChipKickSkill</b> with bias to opposite side of field as the ball (y-coord).      </td>     </tr>    </table>        <a name="transitions"></a>    <h3><b><u>Transitions:</u></b></h3>    <hr>    <table border="0">     <tr>      <td width="100"><ul><li><a href="play_removeBallDefense.html">Remove Ball Defense</a></ul></td>      <td>Blocker has possession of the ball inside the defense           zone.      </td>     </tr>    </table>    <hr>    <table border="0">     <tr>      <td width="100"><ul><li><a href="play_tightDefense.html">Tight Defense</a></ul></td>      <td>Ball is outside of middle sector.           zone.      </td>     </tr>    </table>    <hr>    <table border="0">     <tr>      <td width="100"><ul><li><a href="play_looseDefense.html">Loose Defense</a></ul></td>      <td>Ball is in middle sector, but upfield from kill zone.      
+	   </td> 
+	       </tr>  
+		     </table>  
+			   <hr> 
+
+
+
+    <h3><b><u>Position Switching:</u></b></h3>
+    <hr>
+    <table border="0">
+     <tr>
+      <td width="100"><ul><li>Aggressor, Defender, SpecialOpDefender</ul></td>
+      <td><ul>
+		   <li>If aggressor is upfield from the special op defender, and the special op defender is on the same
+		       side of the field (width wise) as the ball, switch.
+		   <li>If defender is upfield from the special op defender, and the special op defender is on the same
+		       side of the field (width wise) as the ball, switch.
+		   <li>If defender is on outside edge of blocker and aggressor is on inside edge, switch
+		       the defender and aggressor.
+          </ul>
+      </td>
+     </tr>
+    </table>
+    <hr>
+
+			      </ul>
+				     </tr></td> 
+					  </table>
+					   </body></html>

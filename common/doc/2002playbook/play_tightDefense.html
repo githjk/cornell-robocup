@@ -1,0 +1,153 @@
+<html>
+ <head>
+ </head>
+ <body bgcolor="#FFFFFF" link="blue" alink="blue" vlink="blue">
+  
+  <table border="0">  
+   <tr><td width="500">
+    <h2><b>Play: <font color="green">Tight Defense</font></b></h2>    
+    <h3><b><u>Description:</u></b></h3>
+Tight defense is the main defensive play when the ball is far on our side
+of the field. The defender and the blocker work in tandem to form a wall,
+while the aggressor attempts to gain possession of the ball. The special op
+defender blocks a pass around the wall, while the creator awaits an
+opportunity to gain possession of the ball upfield and convert to a goal.
+
+    <h3><b><u>Illustration:</u></b></h3>
+    <img src="images/tightDefensePlay.jpg">
+
+    <a name="positionsPresent"></a>
+    <h3><b><u>Positions Present:</u></b></h3>
+    <ul>
+     <li>Blocker
+     <li>Defender
+     <li>Special Op Defender
+     <li>Aggressor
+     <li>Creator
+    </ul>
+
+    <a name="positionStrategies"></a>
+    <h3><b><u>Position Strategies:</u></b></h3>
+
+    <table border="1">
+     <tr>
+      <td width="500">
+       <h2><b><font color="green">Blocker:</font></b></h2>
+       <ul>
+        <li>If ball is in goalie box -> Follow recover and grab ball strategy as 
+described in <a href="play_cageDefense.html">Cage Defense</a>.  The only difference 
+is that the blocker should only recover balls in the goalie box, and should not leave
+the goalie box.
+<br>This is <b>BlockerGainPosessionSkill</b>
+        <li>Else, <font color"red">Cut Down Angle</font> limiting blocker 
+to be inside the goalie box. Cut down alone. Since goalie box depth is 
+approximately. 4 cm larger than robot diameter, split remaining uncovered 4cm in 
+half, 2cm by post and 2cm on forward edge, thus not allowing a ball to 
+squeeze by the post, doing a better job block the cross crease pass, and 
+avoiding getting stuff on the post when moving into and out of position.
+The position to cut down the angle can be hard-coded to be 2cm in front of
+the proper goal post (based on which post is closer to the ball).
+<br>This is <b>TightDefenseBlockerSkill</b>
+       </ul>
+       <b>NOTE:</b>TightDefenseBlockerSkill will call BlockerGainPosessionSkill if the condition holds.</b>
+      </td>
+     </tr>
+     <tr>
+      <td width="500">
+       <h2><b><font color="green">Defender and Special Op Defender:</font></b></h2>
+       Draw a semi-circle with center being the center of our goal-line, the 
+ball being on the perimeter. Draw a vertical line with the same 
+y-component as the blocker's y-coordinate. Draw the shadow lines from the 
+ball on either side of the blocker. Subtract the shadow and the small area 
+of the semi-circle cut off by the vertical line and consider the remaining 
+piece (see figure).
+       <ul>
+        <li>If 1 opponent is in the consideration zone, send special op 
+defender to handle shot block on this opponent, and the defender to the 
+default position, matching the y coordinate of the blocker and falling back 
+as far as possible without going into the defense zone (see figure).
+        <li>If 0 opponents are in the consideration zone, send the 
+defender into the default position as in the 1 opponent scenario. Send the special op 
+to the default position on the opposite 
+side of the field (widthwise) than the ball. Go in the middle of the sweet sector, 
+defense zone. Split angle between there and the ball and there and the center of the opponent goal.
+This keeps the special op defender out the way, 
+while allowing him to quickly move forward and assist the aggressor once 
+we obtain possession of the ball, and makes it impossible for the opponents to score off the special op with a bounce shot into our goal.
+       </ul>
+       <br>All of the above should be covered by calling <b>TightDefenseDefenderSkill</b>
+      </td>
+     </tr>
+     <tr>
+      <td width="500">
+       <h2><b><font color="green">Aggressor:</font></b></h2>
+        <ul>
+         <li>Ball Free -> approach ball
+         <li>Opponent Has Ball -> strip ball
+         <li>Once in possession, play will transition to single assist offense.
+        </ul>
+        <br>The above covered by calling <b>AcquirePosessionSkill</b>
+      </td>
+     </tr>
+     <tr>
+      <td width="500">
+       <h2><b><font color="green">Creator:</font></b></h2>
+        <ul>
+         <li>Get open for a upfield pass, preferably on the same side of 
+             the field as the ball (width wise)
+        </ul>
+        <br>Call <b>CreatorLookForwardPassSkill</b>
+      </td>
+     </tr>
+    </table>
+
+    <a name="transitions"></a>
+    <h3><b><u>Transitions:</u></b></h3>
+
+    <hr>
+    <table border="0">
+     <tr>
+      <td><ul><li><a href="play_singleAssistOffense.html">Single Assist Offense</a></ul></td>
+      <td>One of our robots (not our blocker) has possession of the ball.</td>
+      </td>
+     </tr>
+    </table>
+    <hr>
+    <table border="0">
+     <tr>
+      <td width="100"><ul><li><a href="play_cageDefense.html">Cage Defense</a></ul></td>
+      <td>Ball is in the death zone and the middle sector.</td>
+     </tr>
+    </table>
+    <hr>
+    <table border="0">
+     <tr>
+      <td><ul><li><a href="play_looseDefense.html">Loose Defense</a></ul></td>
+      <td>Ball is in middle sector and defense zone OR is upfield from 
+defense zone.
+      </td>
+     </tr>
+    </table>
+    <hr>
+
+    <h3><b><u>Position Switching:</u></b></h3>
+    <hr>
+    <table border="0">
+     <tr>
+      <td width="100"><ul><li>Aggressor, Defender, SpecialOpDefender</ul></td>
+      <td><ul>
+			<li>If special op closer to defender's destination than the defender is, switch.
+			<li>If special op closer than aggressor to ball, switch.
+          </ul>
+      </td>
+     </tr>
+    </table>
+    <hr>
+
+
+    </ul>
+   </tr></td>
+  </table>
+
+ </body>
+</html>

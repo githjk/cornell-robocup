@@ -1,0 +1,38 @@
+<html>
+ <head>
+ </head>
+ <body bgcolor="#FFFFFF" link="blue" alink="blue" vlink="blue">
+    <h2><b>Tips and Tricks</b></h2>
+
+<ul>
+ <li>NEVER WRITE CODE IN HEADER FILES! More specifically, declare functions in header files, Define them ONLY in cpp files. Why? When the project gets big, if you have to modify the code in a h file, lots of stuff has to recompile, which is no fun.
+
+ <li>When developing new strategy code, begin by testing with GUI drag-n-drop tools. It helps keeps the robot in 
+a stationary place, and works well on slower systems. Then move to the simulator, and finally towards working with 
+real robots. There is no point to bashing real robots into the walls, setting up batteries, etc. That's what the simulator is for.
+
+ <li>The debug output window is great for debugging, not for real system operation. Hence use it when writing and testing code, remove or comment 
+out all prints to the debug window in your final code.
+
+ <li>Debug points are a great way to see calculated points on the field. USE THEM!
+
+ <li>Always set a robot message in your code. The more specific the better. Lots of debug messages depending on what conditional your code gets into 
+are a great help when it comes to figuring out what happened after the fact. Remember you can use the debugger in the lab, you can't during a game. Debug messages get 
+logged, variables do not.
+
+ <li>Avoid calling new except in constructors and init methods. They slow the system down.
+
+ <li>Anything that seems like it could be tweaked or modified in the future should be a parameter. Extend parameter operations with your class and create a new parameter file.
+
+ <li>Comment you code. Please comment you code!
+ 
+ <li>Memorize the key binding in the AI. It'll make you a lot faster, and just might save your robot's life.
+
+ <li>Things going wrong? Bring up the system quality test and see how long each section of code is taking to execute. If strategy is taking over a millisecond, changes are something is wrong.
+
+ <li>BRML is your friend. Log with F5 and playback using the playback viewer.
+
+</ul>
+
+ </body>
+</html>

@@ -1,0 +1,96 @@
+<html>
+ <head>
+ </head>
+ <body bgcolor="#FFFFFF" link="blue" alink="blue" vlink="blue">
+    <h2><b>Algorithm Guide</b></h2>
+
+    <a name="algorithm_reference"></a>
+    <h3><b><u>High and Mid-Level CRISS algorithm reference:</u></b></h3>
+
+This document serves to explain in simple abstract terms the primary
+algorithms used for dynamics simulation in CRISS. It does not give the
+exact mathematical formulas as they are irrelevant (those are only useful
+for the low-level, very specific algorithms).  It describes the overall
+process used to handle motion, collisions, and non physical conditions.
+
+    <a name="main_loop"></a>
+    <h3><b><u>The Main Loop:</u></b></h3>
+
+The main loop consists of the following steps:
+<ol>
+ <li>Pre-integration
+ <li>Receiving data from the networking, and applying forces/velocities
+according to physical constraints.
+ <li>Integration to the end of the tick.
+ <li>Detection of all collisions that occurred during the tick. (as a result
+of objects moving under no acceleration) This inserts them into a sorted
+list.
+ <li>Resolution of the first (chronologically) collision.  This modifies the
+velocities of the affected objects.
+ <li>Validation of the collision list.
+ <li>Detection of new collisions caused by the resolution of the collision
+ <li>Looping from step three until there are no more collisions unresolved.
+ <li>Sending updated data out to the networking interface.
+ <li>Looping from one until the simulation is complete.
+</ol>
+    <a name="greater_detail"></a>
+    <h3><b><u>Greater Detail:</u></b></h3>
+<ol>
+ <li>Pre-integration is the process of storing information about the current
+position/rotation of an object, and the current time.  This allows the
+integrator to integrate from the "last known position" of the object.  This
+is essential to the architecture, as it allows us to handle discontinuities
+in velocities that occur during infinitesimal-time collisions.
+
+ <li>Receiving data from networking.  This basically applies appropriate
+forces, velocities, positions, etc...  to objects, according to established
+physical parameters (max accelerations, etc)
+
+ <li>Integration to the end of the tick.  This is simply the use of a last
+known position/orientation of an object, along with its velocities to
+displace it, moving it to its new position, corresponding to a given time
+(in this case, the undo the tick).
+
+ <li>Detection of all collisions.  This basically tests to see if each
+circle is colliding with any lines or other circles (the test is efficient
+in that each candidate collision-pair is only tested once).
+
+ <li>Resolution of the first collision.  This is rather complex.  The
+affected objects are integrated backwards to the time of collision.  Their
+velocities are changed by the collision, and their new "starting point" is
+saved by pre-integrating them.  This solves the problem of integrating
+discontinuous velocities.  They are then integrated forward to calculate
+their new positions at the end of the tick.
+
+ <li>Validation of the collision list.  Every collision in the collision
+list that contained one or more of the affected objects is validated to
+insure accuracy.  Most likely they will now be inaccurate, and will be
+thrown out.
+
+ <li>Detection of new collisions.  The affected moving objects are tested in
+their new positions for collisions with other objects.  These are inserted
+into the collision list.
+
+ <li>This loop is repeated until all collisions have been resolved, i.e. the
+collision list is empty.
+
+ <li>The physics simulation, at the end of each cycle, encapsulates a
+snapshot of the current situation, and returns a vector containing this
+snapshot.  The translational and rotational positions and velocities of all
+moving objects in the simulation are recorded in the vector, so that
+networking can provide feedback to the AI system.
+
+ <li>This one-step process is continuously looped throughout the lifetime
+of the simulation.
+
+    <a name="collision_detection"></a>
+    <h3><b><u>Collision Detection:</u></b></h3>
+
+For the purpose of collision detection, there are several algorithms that
+are used. For speed/efficiency purposes (which proved to be largely irrelevant).
+
+ </body>
+</html> 
+ 
+ 
+ 

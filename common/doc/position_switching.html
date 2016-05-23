@@ -1,0 +1,71 @@
+<html>
+ <head>
+ </head>
+ <body bgcolor="#FFFFFF" link="blue" alink="blue" vlink="blue">
+    <h2><b>Position Switching</b></h2>
+
+    <a name="Motivations"></a>
+    <h3><b><u>Motivations:</u></b></h3>
+
+	In the past Cornell has (2000) and has not (2001) attempted to have position switching. Position 
+switching allows robots to quickly react to changes, sending the closest robot to the ball, the 
+least disruptive robot to run upfield to get ready for a pass, and much more. However, without 
+the necessary checks and balances bad things can occur: robots can continue to switch back and forth, 
+resulting in a merry-go-round effect, or even worse, no movement at all. While this problem can 
+be addressed and usually solved quite easily, the worse problem is when robots that should never be 
+switching with each other do. A perfect example of this is the blocker, who should never get from behind 
+the ball, or leave the goal box in an attempt to dribble upfield and score.
+<p>
+	While it is clear position switching makes the system more agile and quick to respond, 
+a mechanism was necessary to ensure horrible things never happen, that things never go awry and 
+result in a goal on our team. The solution was an abstraction that allows some robots to 
+switch with each other and other robots not to. One may allow the defenders to switch back and forth, 
+but never leave their posts, while the offensive players
+can rotate freely, and the blocker to never leave his zone. These requirements are very play 
+specific, especially since different positions
+are present in different plays. The solution we have constructed uses weather, storms, and 
+clouds, which we will explain here.
+
+    <a name="Weather_Storms_Clouds"></a>
+    <h3><b><u>Weather, Storms and Clouds:</u></b></h3>
+
+<b>Clouds</b> refer to a cluster of robot positions that are allowed to switch with each other. No position
+should ever be present in multiple clouds, and clouds may not intersect. By requiring two positions to be 
+present in the same cloud, along with the requirements stated above, we can limit the switching that may 
+take place at any time.
+<p>
+
+For any play in the system, a <b>Storm</b> may be created. Storms contain a few helper functions, and a list of 
+clouds that they contain. 
+These clouds describe what positions are allowed to switch with one another in the given play, and as
+a user creats more storms we build a storm system that describes what position switching that is allowed 
+in each play present. 
+<p>
+<b>Weather</b> is a class that consists of various storms. When constructed the Weather class contains an 
+array of Storm pointers for 
+every play in the system. For plays that will have position switching the Storm pointer is set in 
+the constructor 
+of the Weather class. Every frame, the StrategyModule just runs the preformSwitching function in 
+the weather class. This checks if 
+a Storm has been defined for the current play, and if so runs the preformSwitching function for 
+that storm. Any position switching 
+checks take place in this Storm definition. The base Storm class provides a simple method for 
+switching positions, switchPositions, which first checks if the two positions at hand are in the 
+same cloud, or in a cloud at all, and 
+only performs the switch if this requirement is met. The framework allows position switching to 
+be added to a play at leisure, and when it is 
+allows constraints to be set in the cloud construction. The solution is quite eloquent, and keeps 
+all position switching code in 
+the positions/positionSwitching folder.
+
+    <a name="Location_and_Documentation"></a>
+    <h3><b><u>Weather Box Location and Documented Switches:</u></b></h3>
+
+An instance of the weather box is created in the RoboCupStrategyModule, and is run at the end of every frame by the executeFrame method in 
+the following line:<br>
+<font color="blue">weather->preformSwitching(vision, 
+                         (Parameters*)&(this->getCurrentRoboCupFrame()->getParams()));</font><br>
+All position switching checks are documented at the bottom of every play in the 2002 playbook.
+
+ </body>
+</html>

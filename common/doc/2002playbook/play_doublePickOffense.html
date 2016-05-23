@@ -1,0 +1,100 @@
+<html>
+ <head>
+ </head>
+ <body bgcolor="#FFFFFF" link="blue" alink="blue" vlink="blue">
+  
+  <table border="0">  
+   <tr><td width="500">
+    <h2><b>Play: <font color="green">Double Pick Offense</font></b></h2>    
+    <h3><b><u>Description:</u></b></h3>
+Transitioned to from single assist offensive, the special op creator and
+creator work in tandem to pick two robots, allowing the aggressor to
+dribbling around then and shoot on an open goal.
+
+    <h3><b><u>Illustration:</u></b></h3>
+    <img src="images/doublePickOffensePlay.jpg">
+
+    <a name="positionsPresent"></a>
+    <h3><b><u>Positions Present:</u></b></h3>
+    <ul>
+     <li>Blocker
+     <li>Defender
+     <li>Aggressor
+     <li>Creator
+     <li>Special Op Creator
+    </ul>
+
+    <a name="positionStrategies"></a>
+    <h3><b><u>Position Strategies:</u></b></h3>
+
+    <table border="1">
+     <tr>
+      <td width="500">
+       <h2><b><font color="green">Blocker + Defender:</font></b></h2>
+       Work together cutting down shots in same fashion as described in <a href="play_looseDefense.html">Loose Defense</a>.<br><br>Blocker: <b>TandemBlockerSkill</b><br>Defender: <b>TandemDefenderSkill</b>
+      </td>
+     </tr>
+     <tr>
+      <td width="500">
+       <h2><b><font color="green">Aggressor:</font></b></h2>
+        Utilizes <font color="green">dribble around double pick</font> to 
+get around the special op creator and creator. If shot becomes available 
+play will transition to jam-and-shoot.<br><br>Aggressor: <b>DribblePickScoreSkill</b>
+      </td>
+     </tr>
+      <td width="500">
+       <h2><b><font color="green">Special Op Creator + Creator:</font></b></h2>
+        These robots work in random to setup a double pick. First, 
+construct an array of opponent locations. Remove opponents that are in the 
+defense zone, are on the opposite side of the field than the ball 
+(widthwise), or are not behind the ball (see figure). Next order 
+the opponents from closest to farthest to the 
+opponent goal line by their x-coordinate. Picks are then constructed on 
+the inside edge (closer to center of field along width). Creator picks the 
+closest to the opponent goal and the special op creator picks the second 
+closest. This allows the aggressor to dribble around both picks to an open 
+other side of the field (or at least removing two robots from play), while 
+leaving the special op closer to the middle of the field allows him to 
+quickly become the special op aggressor and not have to cross pass the 
+creator at a later time. During picks both positions should always look 
+directly at the ball.<br><br>Special Op Creator: <b>DoublePickBlockSkill</b><br>Creator: <b>DoublePickBlockSkill</b>
+      </td>
+     </tr>
+     
+    </table>
+    <a name="transitions"></a>
+    <h3><b><u>Transitions:</u></b></h3>
+ 
+    <hr>
+    <table border="0">
+     <tr>
+      <td width="100"><ul><li><a href="play_jamAndShoot.html">Jam and Shoot</a></ul></td>
+      <td>
+       If the aggressor has an open shot on net, OR play timer has run past a certain 
+       threshold.
+      </td>
+     </tr>
+    </table>
+    <hr>
+
+   <h3><b><u>Position Switching:</u></b></h3>
+    <hr>
+    <table border="0">
+     <tr>
+      <td width="100"><ul><li>Aggressor, Creator, SpecialOpCreator</ul></td>
+      <td><ul>
+		    <li>If special op farther upfield than creator, switch
+			<li>If creator or special op has possession of the ball and the aggressor does not, 
+				switch with aggressor.
+          </ul>
+      </td>
+     </tr>
+    </table>
+    <hr>
+
+    </ul>
+   </tr></td>
+  </table>
+
+ </body>
+</html>

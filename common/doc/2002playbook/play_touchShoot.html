@@ -1,0 +1,88 @@
+<html>
+ <head>
+ </head>
+ <body bgcolor="#FFFFFF" link="blue" alink="blue" vlink="blue">
+  
+  <table border="0">  
+   <tr><td width="500">
+ 
+    <h2><b>Play: <font color="green">Touch Shoot</font></b></h2>    
+    <hr width="100%">
+    <a name="illustration"></a>
+    <h3><b><u>Description:</u></b></h3>
+The continuation of the cross-crease pass when the creator finishes the
+receive and shot on goal.
+
+    <h3><b><u>Illustration:</u></b></h3>
+    <img src="images/touchShootPlay.jpg">
+
+    <a name="positionsPresent"></a>
+    <h3><b><u>Positions Present:</u></b></h3>
+    <ul>
+     <li>Blocker
+     <li>Defender
+     <li>Aggressor
+     <li>Creator
+     <li>Special Op Creator
+    </ul>
+
+    <a name="positionStrategies"></a>
+    <h3><b><u>Position Strategies:</u></b></h3>
+
+    <table border="1">
+     <tr>
+      <td width="500">
+       <h2><b><font color="green">Blocker + Defender:</font></b></h2>
+       Work together cutting down shots in same fashion as described in <a href="play_looseDefense.html">Loose Defense</a>.<br><br>Blocker: <b>TandemBlockerSkill</b> <br>Defender: <b>TandemDefenderSkill</b>
+      </td>
+     </tr>
+     <tr>
+      <td width="500">
+       <h2><b><font color="green">Aggressor + Special Op Aggressor:</font></b></h2>
+       Aggressor and Special Op Aggressor setup for rebound from kicked ball. 
+Aggressor sets up on opposite side of field than the creator, special op on 
+same side of the field as the creator.<br><br>Aggressor: <b>TandemReboundOffenseSkill</b><br>Special Op Aggressor: <b>TandemReboundOffenseSkill</b>
+      </td>
+     </tr>
+     <tr>
+      <td width="500">
+       <h2><b><font color="green">Creator:</font></b></h2>
+       Creator moves perpendicular to ball velocity vector, maintaining optimal 
+angle to receive pass and immediately kick it into open goal.<br><br>Creator: <b>TouchShootSkill</b>
+      </td>
+     </tr>
+    </table>
+
+    <a name="transitions"></a>
+    <h3><b><u>Transitions:</u></b></h3>
+
+    <hr>
+    <table border="0">
+     <tr>
+      <td width="100"><ul><li><a href="play_upfieldDefense.html">Upfield Defense</a></ul></td>
+      <td>Once the creator has kicked the ball OR the ball is between the creator and the 
+      goal OR the play timer has timed out.</td>
+     </tr>
+    </table>
+    <hr>
+
+   <h3><b><u>Position Switching:</u></b></h3>
+    <hr>
+    <table border="0">
+     <tr>
+      <td width="100"><ul><li>Aggressor, SpecialOpCreator</ul></td>
+      <td><ul>
+		    <li>If creator on left side of field, keep aggressor to the right of the special op
+			<li>If creator on right side of field, keep aggressor to the left of the special op
+          </ul>
+      </td>
+     </tr>
+    </table>
+    <hr>
+
+    </ul>
+   </tr></td>
+  </table>
+
+ </body>
+</html>

@@ -1,0 +1,200 @@
+<html>
+ <head>
+ </head>
+ <body bgcolor="#FFFFFF" link="blue" alink="blue" vlink="blue">
+  
+  <table border="0">  
+   <tr><td width="500"> 
+    <h2><b>Play: <font color="green">Loose Defense</font></b></h2>    
+    <h3><b><u>Description:</u></b></h3>
+This is the default starting play of the system. It is run any time the
+ball is not in our possession and not far back on our side of the field.
+The main differences between loose defense and tight defense is that the
+defender and the blocker work in tandem to cut down the angle on a shot on
+goal, while the special op defender simultaneously runs pass-block and
+shot block on two opposing robots.
+
+    <h3><b><u>Illustration:</u></b></h3>
+    <img src="images/looseDefensePlay.jpg">
+
+    <a name="positionsPresent"></a>
+    <h3><b><u>Positions Present:</u></b></h3>
+    <ul>
+     <li>Blocker
+     <li>Defender
+     <li>Special Op Defender
+     <li>Aggressor
+     <li>Creator
+    </ul>
+
+    <a name="positionStrategies"></a>
+    <h3><b><u>Position Strategies:</u></b></h3>
+
+    <table border="1">
+     <tr>
+      <td width="500">
+      <h2><b><font color="green">Blocker + Defender</font></b></h2>
+      Blocker and Defender will be engaged in a strategy called <font 
+color="green">Team Defense</font>. This will also be utilized in offensive 
+plays as the ball moves upfield. Since the goal is so wide, the defender 
+and the blocker will work in tandem to cut down all angles while staying 
+out of each others way, and being fully independent. First, the blocker 
+prefers to be on the same side of the field as the ball. This gives him a 
+more optimal position if the ball suddenly moves toward our goal. The 
+blocker will thus work on defending the chunk of goal on the same side of 
+the field as the ball, while the defender picks up the remainder. The 
+algorithm works as follows:
+<p>
+Split the goal in half (or in some other non 50:50 cut as defined in a 
+parameter file if so desired) and consider the chunk of goal on the same 
+side (widthwise) of the field as the ball. Determine the most optimal 
+position to place a robot in the middle sector, death zone (see square 
+blocker is in in figure) such that a robot placed here will cut down as 
+best as possible this section of goal. If unable to block entire section 
+of goal, split open space 50:50 to decrease allowed error in shots allowed 
+to score. Consider this point to be the <font color="green">blocker 
+point.</font>(Note: this is not necessarily where the blocker will be!)
+<p>
+The defender will calculate this artificial point and assume the blocker is 
+really there. The defender will then consider the larger portion of 
+uncovered goal and will attempt to cover it, running the cut down skill 
+and limited himself to be in the defense zone.
+<p>
+Next, the blocker will look at the portion of the goal the defender is 
+CURRENTLY (based on vision data) covering. The blocker will in turn run 
+cut-down defense on the remaining portion, and limit himself to be in the 
+death zone. As the defender moves into position, the blocker will need to 
+cover less and less goal, and the two will converge into a sharing 
+position.
+<p>
+Notes: 
+<ul>
+ <li>If the defender does not exist or is not found, it is assumed he is 
+ covering none of the goal.
+ <li>If the blocker does not exist or is not found, the defender will run 
+cut-down defense on the entire goal mouth, limiting himself again to be in 
+the defense zone. 
+</ul>
+Blocker: <b>TandemBlockerSkill</b><br>Defender: <b>TandemDefenderSkill</b>
+
+      </td>
+     </tr>
+     <tr>
+      <td width="500">
+       <h2><b><font color="green">Special Op Defender:</font></b></h2>
+       The special op will try to cover 1-2 opponents, but not the 
+opponent who actually has the ball. First, construct an array of opponent 
+locations. Then remove any opponent who has possession of the ball, who's 
+x-coordinate is greater than the balls x-coordinate plus a grace distance, 
+or is on the opposite half of the field than the ball (widthwise). Order 
+the opponents based on increasing x-coordinate, such that the first 
+opponent is closest to our our goal line (small x-coordinate). Mark this 
+first opponent as Op1. Of the remaining opponents, pick the one closest to 
+the ball and mark him as Op2. See figure for an example.
+<p>
+Draw a vector through the center of Op1 and the ball. Consider the area on 
+the goal that Op2 has a good open shot on if he had the ball suddenly, and 
+draw a vector through the midpoint of this open area and Op2. See figure 
+for these vectors.
+<p>
+Send the special op defender to the intersection of these vectors. The 
+special op. defender will effectively be playing pass-block on op1, while 
+playing shot-block on op2. Set his angle to look directly at the ball in 
+case the ball does actually come to him.
+<p>
+If Op1 exists but no Op2 exists, screen Op1 as close as possible to him, 
+while looking at the ball. This both acts as a pass-block, but also 
+removed Op1 from the play since he will be cut off.
+<p>
+If neither Op1 nor Op2 exist, go to a default position on the opposite 
+side of the field (widthwise) than the ball. Go in the middle of the sweet sector, 
+defense zone. Split angle between there and the ball and there and the center of the opponent goal.
+This keeps the special op defender out the way, 
+while allowing him to quickly move forward and assist the aggressor once 
+we obtain possession of the ball, and makes it impossible for the opponents to score off the special op with a bounce shot into our goal.
+<p>
+If Op2 does not have an open shot, assume Op2 does not exist. 
+<p>
+If Op1 and Op2 exist, but Op1 is closer to the ball than Op2 (purely the 
+difference of the y-coordinates), then just do <font 
+color="green">shot-block</font> on Op1.
+<P>
+If op1 does not have a lane between him and the ball, no need to do pass block on him, so just do shot-block on Op2.
+<br><br>Special Op Defender: <b>LooseDSpecialOpSkill</b>
+      </td>
+     </tr>
+     <tr>
+      <td width="500">
+       <h2><b><font color="green">Aggressor:</font></b></h2>
+       <ul>
+        <li>Ball Free->approach ball
+        <li>Opponent has ball -> strip ball to outer side (closest 
+            sideline)
+        <li>Once we have the ball play will transfer to single assist 
+        offense.
+       </ul>Aggressor: <b>AcquirePosessionSkill</b>
+      </td>
+     </tr>
+     <tr>
+      <td width="500">
+       <h2><b><font color="green">Creator:</font></b></h2>
+        Get open for a forward pass.<br><br>Creator: <b>CreatorLookForwardPassSkill</b>
+      </td>
+     </tr>
+    </table>
+
+    <a name="transitions"></a>
+    <h3><b><u>Transitions:</u></b></h3>
+ 
+    <hr>
+    <table border="0">
+     <tr>
+      <td width="100"><ul><li><a href="play_singleAssistOffense.html">Single Assist Offense</a></ul></td>
+      <td>We have possession of the ball.</td>
+     </td></tr>
+    </table>
+    <hr>
+    <table border="0">
+     <tr>
+      <td width="100"><ul><li><a href="play_upfieldDefense.html">Upfield Defense</a></ul></td>
+      <td>Ball is above the half line.</td>
+     </tr>
+    </table>
+    <hr>
+    <table border="0">
+     <tr>
+      <td width="100"><ul><li><a href="play_tightDefense.html">Tight Defense</a></ul></td>
+      <td>Ball is in the defense or death zones and outside of the middle 
+sector.</td>
+     </tr>
+    </table>
+    <hr>
+    <table border="0">
+     <tr>
+      <td width="100"><ul><li><a href="play_cageDefense.html">Cage Defense</a></ul></td>
+      <td>Ball is in the middle sector, death zone.</td>
+     </td></tr>
+    </table>
+    <hr>
+
+    <h3><b><u>Position Switching:</u></b></h3>
+    <hr>
+    <table border="0">
+     <tr>
+      <td width="100"><ul><li>Aggressor, Defender, SpecialOpDefender</ul></td>
+      <td><ul>
+		    
+			<li>If special op closer to defender's destination than the defender is, switch.
+			<li>If special op closer than aggressor to ball, switch.
+          </ul>
+      </td>
+     </tr>
+    </table>
+    <hr>
+
+    </ul>
+   </tr></td>
+  </table>
+
+ </body>
+</html>

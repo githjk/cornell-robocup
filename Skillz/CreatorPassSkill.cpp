@@ -1,0 +1,207 @@
+#include "CreatorPassSkill.h"
+//#include "CrossCreasCreatorSkill.h"
+#include <iostream.h>
+#include "info/robot/robot.h"
+#include "GUI/GUI.h"
+#include "RoboCup_modules/RoboCupStrategyModule.h"
+#include "common/util/pair/pair.h"
+#include "common/util/math/cmath.h"
+#include "common/util/math/dist.h"
+#include "common/util/intersect/intersect.h"
+#include "common/util/shoot/shoot.h"
+#include "common/util/math/angle.h"
+
+
+int CreatorPassSkill::skillNum = -1;
+
+
+///Constructor.  Calls the base class Skill constructor
+CreatorPassSkill::CreatorPassSkill(SystemParameters *sp,
+                                                 VisionModule *vm, 
+                                                 RoboCupStrategyModule *strat,
+                                                 RobotIndex id, 
+                                                 SkillSet* set) : Skill(sp,vm,strat,id, set) 
+{
+  loadValues();
+  initialized = false;
+}
+//===============================================================================
+//Call this function to check the prerequisites of the skill.  This will return 
+//a bool indicating whether or not the skill is ciable in the present situation.
+bool CreatorPassSkill::isValid() 
+{ 
+  
+ 
+  //Get the aggressor location
+  RobotIndex aggressorID = strategy->getCurrentRoboCupFrame()->getRobotByPosition(AGGRESSOR); 
+  Pair aggressorPos(getLocation(aggressorID,*currentVisionData,*sp));
+  Pair creator(getLocation(robotID,*currentVisionData,*sp));
+  
+  bool isPass=false;
+
+  
+  //In no pass, check out where the creator currently is
+  if(!isPass ){
+    isPass = calcYShot(aggressorID,creator.getY(),FACTOR*sp->strategy2002.PASS_LANE_THRESH,
+      creator.getX()-CLOSE_BOUND,creator.getX()+CLOSE_BOUND,robotID,*currentVisionData,*sp,&creatorPos);
+  }
+  //In no pass, check out where the creator currently is
+  if(!isPass ){
+    isPass = calcShot(aggressorID,creator.getX(),FACTOR*sp->strategy2002.PASS_LANE_THRESH,
+      creator.getY()-CLOSE_BOUND,creator.getY()+CLOSE_BOUND,robotID,*currentVisionData,*sp,&creatorPos);
+  }
+
+  isPass=isPass && 
+         ABS( angleDifference(getRotation(aggressorID,*currentVisionData,*sp),angleBetween(aggressorPos,creatorPos))) < PI/MAXIMUM_ANGLE &&
+         creatorPos.distanceTo(creator) < PASS_DIST  &&
+         creatorPos.distanceTo(aggressorPos) > MIN_DIST  &&
+         ABS(angleBetween(aggressorPos,creator)) < ANGLE_LIMIT;
+  /// Set the pass destination
+  if(isPass)
+  {
+    if(!initialized){
+      strategy->getCurrentRoboCupFrame()->setPassDest(robotID,creatorPos);
+      strategy->getCurrentRoboCupFrame()->setPassValue(robotID,true);
+    }
+  }
+
+
+  ///If rotation of aggressor is correct and if pass can be received skill and creator is close enough, is valid
+  return(isPass );
+
+ 
+}
+//===============================================================================
+//Perform any initializations for the skill, such as reseting the timer.
+void CreatorPassSkill::initialize() 
+{
+  timer->resetTimer();
+  initialized=false;
+  if(!isValid()){//set pass destination
+    GUI_Record.debuggingInfo.addDebugMessage("No Pass found for Creator Pass.");
+  }
+  initialized = true;
+
+    
+}
+//===============================================================================
+//Execute the skill.  This is the main part of the skill, where you tell the
+//robot how to perform the skill.
+void CreatorPassSkill::execute()
+{    
+  ///If not initialized, dont do anything!
+  if(!initialized) {
+    GUI_Record.debuggingInfo.addDebugMessage("CreatorPassSkill not initialized!");    
+    return;  
+  }
+  //This skill should do the same thing as Cross Crease, namely, head to the pass dest.
+  strategy->getCurrentRoboCupFrame()->setPassDest(robotID,creatorPos);
+  strategy->getCurrentRoboCupFrame()->setMessage(robotID,"Getting ready for pass.");  
+  
+  RobotIndex aggressorID = strategy->getCurrentRoboCupFrame()->getRobotByPosition(AGGRESSOR); 
+  Pair aggressorPos(getLocation(aggressorID,*currentVisionData,*sp));
+
+  float angle=angleBetween(creatorPos,aggressorPos);
+  command->setPos(robotPositionGivenFront(creatorPos,angle,*sp));
+  command->setRotation(angle);
+  
+}
+
+///If the timer goes past 3 secs, reverse rotation
+bool CreatorPassSkill::evaluate() 
+{
+  return true;
+}
+
+
+
+
+//===============================================================================
+//For tweaking the skill.  You may want to change local parameters or behave 
+//differently to adapt to any situation that is frustrating the skill
+void CreatorPassSkill::update() 
+{
+  ///If not initialized, dont do anything!
+  if(!initialized) return;    
+}
+
+
+
+//===============================================================================
+///test skill goes forever
+bool CreatorPassSkill::isFinished(float tolerance)
+{
+  return false;
+}
+//===============================================================================
+void CreatorPassSkill::loadValues()
+{
+  ///Open the paramater file:
+  ///REMEMBER TO CHANGE THE PARAMETER TEXT FILE NAME TO THE APPROPRIATE NAME!
+  ifstream mainFile;
+  mainFile.open("Params/Skill_Params/CreatorPassSkillParams.txt", ios::nocreate);
+  
+  ASSERT(mainFile.fail() == 0, "CAN'T OPEN PARAMETER FILE!");
+
+  //Load parameter values.  See params.h and params.cpp for good examples.
+  //################  ADD PARAMETERS BELOW ################  
+  READ_FLOAT(OFFSET);
+  READ_FLOAT(MIN_WIDTH);
+  READ_FLOAT(MAXIMUM_ANGLE);
+  READ_FLOAT(FACTOR);
+  READ_FLOAT(GOALIE_DISTANCE_THRESHOLD);
+  READ_FLOAT(BOUND_FACTOR);
+  READ_FLOAT(PASS_DIST);
+  READ_FLOAT(CLOSE_BOUND);
+  READ_FLOAT(MIN_DIST);
+  READ_FLOAT(ANGLE_LIMIT);
+
+  //################  ADD PARAMETERS ABOVE ################
+  mainFile.close();
+  
+}
+
+///=============================================================================
+
+float CreatorPassSkill::calculateGoalieEffect()
+{
+
+
+  /// How much we will like the creator to backoff
+  float moveBack = 0.0f;
+  
+  
+  /// Find the opponent which is closest to the goal point   
+
+
+     Pair goalPoint(sp->field.THEIR_GOAL_LINE,(sp->field.LEFT_GOAL_POST+sp->field.RIGHT_GOAL_POST+2)/2);
+       float closest = 32000.0f;
+	   RobotIndex closeRobot = NO_ROBOT;
+       
+	   Pair robot=getLocation(robotID,*currentVisionData,*sp);
+       for(RobotIndex i=ROBOT0;i<NUM_PLAYERS_ON_TEAM;i++){
+          Pair C(getLocation(sp->general.OTHER_TEAM,i,*currentVisionData));
+		  if(dist(C,goalPoint) < closest)
+		  {
+			  closest = dist(C,goalPoint);
+			  closeRobot = i;
+		  }
+	   }
+  
+	  
+	   /// If the distance of our robot from the closest robot 
+	   /// is greater than certain Threshold
+	  
+	   if(closeRobot != NO_ROBOT)
+	   {
+		   Pair closeRobotLocation(getLocation(sp->general.OTHER_TEAM,closeRobot,*currentVisionData));
+		   if(dist(robot,closeRobotLocation) < GOALIE_DISTANCE_THRESHOLD)
+		   {
+          moveBack = GOALIE_DISTANCE_THRESHOLD - dist(robot,closeRobotLocation);
+			   
+       }
+
+     }
+     return moveBack;
+
+}

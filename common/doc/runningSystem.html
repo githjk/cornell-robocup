@@ -1,0 +1,46 @@
+<html>
+ <head>
+ </head>
+ <body bgcolor="#FFFFFF" link="blue" alink="blue" vlink="blue">
+    <h2><b>Running the System</b></h2>
+
+    <a name="Connecting_to_a_Vision_System"></a>
+    <h3><b><u>Connecting to a Vision System:</u></b></h3>
+
+In order to have the AI connect to a vision system you must provide the IP address of the machine 
+the vision system is running on when you start the AI. Go to robocup-ai-2002/runtime folder,
+open a command prompt and type <font color="blue">robocupAI <ipAddress of the vision machine></font>
+<p>
+Since the vision system is usually run from Athena, running the AI without this argument will default
+to connecting to a vision system on Athena. Since typing in IP's for various computers is annoying, we
+have created a number of bat files that automate this process. If you want to connect to a vision system on
+the local machine, use localAI.bat. If the 
+vision system goes down while the AI is on, the AI need not close and restart to reconnect. Using the menu 
+entries or simply typing control-v will connect/disconnect from the vision system at the specified ip.
+
+    <a name="Connecting_to_a_Simulator"></a>
+    <h3><b><u>Connecting to a Simulator:</u></b></h3>
+
+To run the AI with the simulator, first you must start the simulator. Go to 
+robocup-ai-2002/runtime folder/2002SimulatorBinaries. Click on <font color="blue">
+5x5simulator.bat</font> to start the simulator. To modify the behavior of the simulator changes 
+can be made in 5by5.xml, however the simulator must be restarted each time. In order to move 
+objects around on the field click on <font color="blue">RobocupDisplay.exe</font>. This brings 
+up a GLUT interface to the simulator, and allows robots to be moved around as described in the 
+debugging tools section. Now that the simulator is running, start the AI by running 
+<font color="blue">localAI.bat</font> in the runtime folder since you'll be connecting to 
+a vision system on the local machine.
+<p>
+If you wish to connect to the simulator through the debugger in Visual studio, you must 
+set the working directory and program arguments first. Click on Project on the title menu. 
+Click Settings. Click on Debug tab. Enter 127.0.0.1 for the program arguments, since you are 
+connecting to a simulator running locally. For the working directory enter ..\runtime_folder 
+since by default VC++ uses the MSDEV folder where the project dsw lives. When you hit F5 to 
+start the system in the debugger it should be able to connect to a local simulator.
+
+ </body>
+</html>
+
+
+
+

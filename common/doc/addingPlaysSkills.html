@@ -1,0 +1,85 @@
+<html>
+ <head>
+ </head>
+ <body bgcolor="#ffffff" link="blue" alink="blue" vlink="blue">
+    <h2><b>Adding Plays/Skills to the System</b></h2>
+
+    <a name="Adding_a_Play"></a>
+    <h3><b><u>Adding a Play:</u></b></h3>
+
+<P> Once a play is created, there are three things that must be done to add it to the system:</P>
+<OL>
+  <LI>You must include your header file into 
+  PlayIncludes.h 
+  <LI>You must create&nbsp;your play, by calling its 
+  constructor in&nbsp;playbook.cpp 
+  <LI>You must initialize the playNum integer in RegisterPlays.cpp</LI></OL>
+<P>As you can see, the process for adding new plays is 
+identical to that of adding new skills, it just involves different files.&nbsp; 
+One difference to be aware of, however, is that there are different categories 
+of plays (2001, 2002, skill plays, etc).&nbsp; So you must make sure you are 
+adding your play to the correct category.&nbsp; The actual order only matters in 
+RegisterPlays.cpp, when the play numbers are handed out, but it's good to be 
+consistent.<BR>Using the example of StupidSkillTest (a skill test play), we will walk through each of these 
+steps.
+<br>First, add the include line into PlayIncludes.h:</P>
+<P><FONT face=Courier color=gray>#include 
+"skillPlays/InterceptBallSkill_Test.h" <BR>#include 
+"skillPlays/TightDefenseSpecialOpDSkill_Test.h" <BR></FONT><FONT 
+face=Courier><FONT color=gray><FONT 
+color=red>#include 
+"skillPlays/StupidSkill_Test.h" <BR>  </FONT>//----- </FONT></FONT></P>
+<P>Next, add the constructor into playbook.cpp: </P>
+<P><FONT face=Courier color=silver><FONT 
+color=gray>playbook[TurnAndKickSkillTest::playNum] = new 
+TurnAndKickSkillTest(vision); 
+<BR>playbook[TightDefenseSpecialOpDSkillTest::playNum] = new 
+TightDefenseSpecialOpDSkillTest(vision); <BR></FONT><FONT 
+color=red>playbook[StupidSkillTest::playNum] = new StupidSkillTest(vision); 
+</FONT></FONT></P>
+<P>Finally, add the playNum initialization into RegisterPlays.cpp:</P>
+<P><FONT face=Courier 
+color=gray>TurnAndKickSkillTest::playNum=numPlays++; 
+<BR>TightDefenseSpecialOpDSkillTest::playNum=numPlays++;<BR><FONT 
+color=red>StupidSkillTest::playNum=numPlays++;<BR></FONT>END_JOEL_SKILL_TEST_PLAYS=numPlays++;<BR> 
+//---- </FONT></P>
+<P>Now your play is present in the system.&nbsp; When you 
+run the AI, it should show up under the plays menu.</P>
+<p>
+    <a name="Adding_a_Skill"></a>
+    <h3><b><u>Adding a Skill:</u></b></h3>
+
+<P>Once your skill is created, there are three things that must be done to add it to the system:</P>
+<OL>
+  <LI>You must include your header file into 
+  SkillSetIncludes.h 
+  <LI>You must create&nbsp;your skill, by calling its 
+  constructor in&nbsp;SkillSet.cpp 
+  <LI>You must initialize the skillNum integer in RegisterSkillz.cpp</LI></OL>
+<P>Using the example of StupidSkill, we will walk through each of these 
+steps.
+<br>First, add the include line into SkillSetIncludes.h:</P>
+<P><FONT face=Courier color=gray>#include "CreatorCreateSkill.h" 
+<br>#include "SpecialOpBlockSkill.h" 
+<br></FONT><FONT face=Courier><FONT 
+color=red>#include "StupidSkill.h" <BR>  </FONT><FONT color=gray>//----- 
+</FONT></FONT></P>
+<P>Next, add the constructor into SkillSet.cpp: </P>
+<P><FONT face=Courier color=gray>skillArray[CreatorCreateSkill::skillNum] = new CreatorCreateSkill(rp, vm, 
+strategy, id, this); 
+<br>skillArray[SpecialOpBlockSkill::skillNum] = new SpecialOpBlockSkill(rp, vm, 
+strategy, id, this); 
+<br></FONT><FONT face=Courier 
+color=red>skillArray[StupidSkill::skillNum] = new StupidSkill(rp, vm, strategy, 
+id, this); <BR></FONT><FONT face="Times New Roman" color=#000000><FONT 
+face=Courier color=gray>//-----</FONT> </FONT></P>
+<P>Finally, add the skillNum initialization into RegisterSkillz.cpp:</P>
+<P><FONT face=Courier><FONT 
+color=gray>PassBlockSkill::skillNum = numSkillz++; <BR>ShotBlockSkill::skillNum 
+= numSkillz++; <BR></FONT><FONT color=red>StupidSkill::skillNum = numSkillz++; 
+<BR></FONT><FONT color=gray>//-- </FONT></FONT></P>
+<P>Now your skill is present in the system and can be called by other skills and 
+plays.</P>
+
+ </body>
+</html>

@@ -1,0 +1,50 @@
+<html>
+ <head>
+ </head>
+ <body bgcolor="#FFFFFF" link="blue" alink="blue" vlink="blue">
+    <h2><b>Referee Box</b></h2>
+
+    <a name="Description"></a>
+    <h3><b><u>Description:</u></b></h3>
+
+		The Referee Box is a PC program designed to allow referees to send serial commands to the two competing teams during a match.  The program, developed by <a href="http://www.cmu.edu/"> Carnegie Mellon University</a>, keeps track of the game details, such as score, time remaining, number of penalties assessed, etc.  
+	</p>
+	<p>	The <i>Referee Box Interface</i> is designed to allow the AI to easily implement an interface with the Referee Box.  The <i>Referee Box Interface</i> is responsible for initializing the serial connection to the Referee Box, receiving incoming commands from the Referee Box, and processing such commands into a form easily interpreted by the AI.
+	</p>
+
+    <a name="Design_Overview"></a>
+    <h3><b><u>Design_Overview:</u></b></h3>
+
+		The <i>Referee Box Interface</i> is designed as a flexible and adaptable utility.  It is comprised of two main parts - the serial connection and the processing loop.
+	</p>
+	<p> 
+		The serial connection portion uses the Serial Port Interface, which creates an entry point for the console application.  It is implemented using Block IO, which means that a thread is blocked during a read and write until the operation is completed.  The baud rate, parity, flow control and other properties can be easily set.
+	</p>
+	<p>	
+		The processing loop is the main component of this interface.  When an instance of the <i>Referee Box Interface</i> is initialized within a program, the serial connection is established.  Furthermore, when the start() method is called, a new thread is created to handle the processing of commands that are received from the Referee Box through the serial connection.  Within the thread, a while loop is run indefinitely until end() is called.  Within the loop, a command is taken from the serial connection, and the corresponding command is matched to one of the recognized commands.  When a recognized command is received, it is stored within a FIFO queue so that the order in which the commands are received remains intact.
+	</p>
+
+    <a name="Implementation"></a>
+    <h3><b><u>Implementation:</u></b></h3>
+
+		To implement this <i>Referee Box Interface</i>, you first have to create an instance of the RefBoxInterface, and run the initialize() method.  The required arguments are color (teamColor - enumeration. either yellow or blue) and port name (name of the serial port through which the Referee Box commands are received).  The other arguments allow one to adjust the serial port parameters.  The default values correspond with the Referee Box Settings as specified on the official web site (<a href="#Additional_Resources">1</a>). "The protocol consists of single ASCII characters sent at 9600 baud (a faster rate may be chosen for the next release), with no parity,  8 data bits and no flow control."  This initializes the serial connection.  The return value for initialize() is the error code of the serial connection. A value of 0 means that there was no error.
+	</p>  
+	<p>
+		Next, run the start() method, which creates the thread and begins the processing loop.  This will start storing the commands in the queue.  The stop() method stops the processing loop and terminates the thread.  Running start() again will resume the process.
+	</p>
+	<p>
+		To retrieve the command, run the getEvent() method.  This will return a command of type refBoxCommand, which is also an enumeration of all the possible commands received from the Referee Box.  The commands are <i> relative </i> to the team color that was specified in the initialize() method.  For example, suppose that there is a penalty against yellow.  If yellow was initialized, then the refBoxCommand will be PENALTY_US.  If blue was specified, then the refBoxCommand will be PENALTY_THEM.  An EMPTY command is returned when queue is empty.  A CONNECTED command is returned if nothing is received from Referee Box, but the connection is still active.  To easily decipher the refBoxCommand, use a case statement for each of the desired commands.
+	</p>
+
+
+    <a name="Additional_Resources"></a>
+    <h3><b><u>Additional Resources:</u></b></h3>
+<ul>
+	<li>
+		Official RoboCup 2002 Referee Box Site - <a href="http://www-2.cs.cmu.edu/~brettb/robocup/referee.html" taget="_top">http://www-2.cs.cmu.edu/~brettb/robocup/referee.html</a>
+	</li>
+</ul>
+
+
+ </body>
+</html>

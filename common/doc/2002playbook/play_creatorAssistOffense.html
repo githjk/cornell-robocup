@@ -1,0 +1,90 @@
+<html>
+ <head>
+ </head>
+ <body bgcolor="#FFFFFF" link="blue" alink="blue" vlink="blue">
+  
+  <table border="0">  
+   <tr><td width="500">
+ 
+    <h2><b>Play: <font color="green">Creator Assist Offense</font></b></h2>    
+    <hr width="100%">
+    <a name="illustration"></a>
+    <h3><b><u>Description:</u></b></h3>
+When the creator has trouble getting open for a pass, the special op
+creator slides over, covering the creators man and pulling his blocker
+with him, setting up a screen and allowing the creator to shift toward the
+center of the field and open for a quick pass-shot on goal.    
+
+    <h3><b><u>Illustration:</u></b></h3>
+    <img src="images/creatorAssistOffensePlay.jpg">
+
+    <a name="positionsPresent"></a>
+    <h3><b><u>Positions Present:</u></b></h3>
+    <ul>
+     <li>Blocker
+     <li>Defender
+     <li>Aggressor
+     <li>Creator
+     <li>Special Op Creator
+    </ul>
+
+    <a name="positionStrategies"></a>
+    <h3><b><u>Position Strategies:</u></b></h3>
+
+    <table border="1">
+     <tr>
+      <td width="500">
+       <h2><b><font color="green">Blocker + Defender:</font></b></h2>
+       Work together cutting down shots in same fashion as described in <a href="play_looseDefense.html">Loose Defense</a>.<br><br>Blocker: <b>TandemBlockerSkill</b><br>Defender: <b>TandemDefenderSkill</b>
+      </td>
+     </tr>
+     <tr>
+      <td width="500">
+       <h2><b><font color="green">Aggressor:</font></b></h2>
+       Turn to face the creator, immediately kicking if creator gets open. If too 
+much time takes place, play times out and transitions back to single assist 
+offense.<br><br>Aggressor: <b>PassToCreatorSkill</b>
+      </td>
+     </tr>
+     <tr>
+      <td width="500">
+       <h2><b><font color="green">Special Op Creator + Creator:</font></b></h2>
+       Creator move laterally towards the aggressor towards a point where he can 
+complete a quick pass-shoot combo to score. Meanwhile the special op creator moves 
+laterally AWAY from the aggressor and aims for the robot covering the creator.<br><br>Special Op Creator: <b>SpecialOpBlockSkill</b><br>Creator: <b>CreatorCreateSkill</b>
+      </td>
+     </tr>
+    </table>
+
+
+    <h3><b><u>Transitions:</u></b></h3>
+ 
+    <hr> 
+    <table border="0">
+     <tr>
+      <td width="100"><ul><li><a href="play_jamAndShoot.html">Jam and Shoot</a></ul></td>
+      <td>If the aggressor has an open shot on net, or the play timer has passed a threshold.</td>
+     </tr>
+    </table>
+    <hr>
+
+   <h3><b><u>Position Switching:</u></b></h3>
+    <hr>
+    <table border="0">
+     <tr>
+      <td width="100"><ul><li>Aggressor, Creator, SpecialOpCreator</ul></td>
+      <td><ul>
+			<li>If creator or special op has possession of the ball and the aggressor does not, 
+				switch with aggressor.
+          </ul>
+      </td>
+     </tr>
+    </table>
+    <hr>
+
+    </ul>
+   </tr></td>
+  </table>
+
+ </body>
+</html>

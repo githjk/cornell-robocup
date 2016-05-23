@@ -1,0 +1,150 @@
+<html>
+ <head>
+ </head>
+ <body bgcolor="#FFFFFF" link="blue" alink="blue" vlink="blue">
+    <h2><b>Overall AI</b></h2>
+
+    <a name="System_Initialization"></a>
+    <h3><b><u>System Initialization</u></b></h3>
+
+    <p>When the AI system is initialized, the following actions take place :-</p>
+
+    <p>1) Loading of parameters :- All the well-known constants used in the
+    system are stored as parameters in a file named <font color="#0000FF">'Robocup_Parameters.txt'</font>
+    and <font color="#0000FF">'Robocup_2001_TrajectoryParams.txt'</font>. These
+    files can be found in the runtime folder. Additionally we have parameters for
+    individual skills and plays that can be found under <font color="#0000FF">runtime\SkillParams</font>
+    and <font color="#0000FF">runtime\PlayParams</font>. In this way we can
+    change system characteristics without modifying the code and recompiling.
+    Moreover, we do not have to wade through code to find these variables and change 
+them.</p>
+
+    <p>2) Registration of Skills and Plays :- Skills are low-level human
+    behavior exhibited by the robots like dribbling the ball, kicking the ball,
+    moving around the ball. Plays use multiple underlying skills to achieve a
+    goal like scoring through a corner kick, passing the ball from the defender
+    to the forward player. All these plays combined form the overall strategy
+    for the whole system. This is explained in detail in later sections. It is
+    important to know the number of skills and plays we will be having in our
+    system from beginning. No plays or skills can be removed or added
+    dynamically when the system is running and hence they have to be registered
+    when the system starts. The code for registration can be found under <font color="#0000FF">registerSkillz.cpp</font>
+    and <font color="#0000FF">registerPlays.cpp</font>.</p>
+
+    <p>3) Creation of modules :- We have adopted a modular design for our
+    system. All the main components of AI are divided into different modules.
+    This makes the understanding and debugging of our code easy. Moreover, you
+    do not need to understand the whole code to develop something. It has often
+    been the case that new students do not understand the whole structure of the
+    code till the end but are able to code into the system easily. Modules are discussed in detail below.</p>
+
+    <p>4) Getting the First frame :- It is important to get the first frame from
+    vision as it lets us know if the vision system is running or not. And we
+    need to know the initial state of the system. How many robots are we
+    starting with on the field? What are the initial locations of the robots?.
+    What happens in execution of frame can be found out from executeFrame()
+    function in <font color="#0000FF">StandardModule.cpp</font>.</p>
+
+    <p>5) Starting the GUI :- A separate thread for the GUI is spawned and runs for the duration of program executing. The GUI has been written using Tcl for all widget 
+drawing. Most GUI related code can be found under the <font color="#0000FF">GUI</font>
+    folder.</p>
+
+    <p>6) Starting the Referee Box :-&nbsp; The 2002 rules require that our
+    system allow control by the referee for stopping and starting play. 
+We initialize begin listening on the serial port for referee box commands by creating and starting and instance of the referee box interface. More on referee box in later
+    sections. The code for referee box can be found under <font color="#0000FF">refereeBox</font> folder.</p>
+
+    <p>7) Starting the AI main loop:-&nbsp; After the system has been
+    initialized successfully, we start the main loop which will be executed
+    continuously till you close the system. What goes on in AI main loop is
+    explained next. The AI main loop is in main.cpp and begins with the condition:</p>
+
+    <p><font color="#0000FF">  while(Cornell_is_Superior) //aka forever...</font></p>
+
+    <a name="Overall_Loop"></a>
+    <h3><b><u>Overall Loop:</u></b></h3>
+
+    <p>The AI system runs in a constant loop. This loop has to run exactly 60
+    times a second. This is because our AI is a slave to Vision, and allows proper prediction of vision information every frame. The main actions that take play in the loop are :-</p>
+    <p>1) Get Vision data ( New Frame) :- We first wait to receive Vision data
+    for the new frame. We expect vision to give us this frame within certain
+    fixed time. If we do not receive any frame then we eventually time out and move on. If the vision is
+    off, we simply get no data but delay the execute of the main loop. If we are playing on the opposite side fo the field, after getting new vision data it must first be flipped which essentially consists of negating all object coordinates. </p>
+    <p>2) Send Commands to Robots ( Previous Frame) :-&nbsp; The commands that
+    were calculated for the previous frame are sent via wireless communication. We next send the previous commands via networking to the simulator if a connection is present.</p>
+    <p>3) Predict Vision data :-&nbsp; Now we update our frame counter and frame
+    pointer to the new frame and try to predict vision data for the new frame.
+    Prediction is necessary as some time has passed since last image was grabbed by the vision system, and more time will take place until the robots receive the next commands. As a result all objects must be predicted forward using their last observered or commanded velocities.</p>
+    <p>4) Execute strategy and calculate new positions of robots
+    :-&nbsp;&nbsp;&nbsp; The first thing we need to do is find out which robot
+    has the possession of ball. Then we check if the play and positions have
+    changed since last position and update them. We get the pointer to current
+    play, current destinations of robots and execute it. After that we look for
+    possible play and position transitions..</p>
+    <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</p>
+    <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+    <img border="0" src="images/AILoop.gif" width="489" height="296"></p>
+    <p>&nbsp;</p>
+    <p>5) Trajectory Generation :-&nbsp; After we have calculated the new
+    destinations of every robot, we need to find a path to move from the current locations 
+    to the new destinations. This is done by the trajectory module.</p>
+    <p>6) Evaluate and update Skills :- This is for evaluating how your skill
+    did when it was executed and then update your skill accordingly. This is not
+    implemented in most of the skills but can be used for learning.</p>
+    <p>&nbsp;</p>
+    <p>&nbsp;</p>
+    <a name="Modules_Used"></a>
+    <h3><b><u>Modules Used:</u></b></h3>
+
+    The artificial intelligence has three main modules. They are :-
+    <p><font size="3"><b>1) VisionModule</b></font><font size="4"><font color="#0000FF">
+    </font>:-</font><font SIZE="2">&nbsp; </font><font size="3">Receives Vision
+    information from vision system or simulator, predicts that information to
+    account for latency.</font></p>
+    <p><font size="3"><b>2) StrategyModule</b></font><font size="3"><b> :</b></font><font SIZE="2">
+    -&nbsp; </font><font size="3">Receives predicted vision information from the
+    VisionModule, chooses destinations for all 5 robots.</font></p>
+    <p><font size="3"><b>3) ControlModule : -</b></font><font SIZE="2">&nbsp;</font><font size="3">
+    Receives predicted vision from VisionModule and destinations from
+    StrategyModule, the makes robots go to those destinations. The control
+    module has two sub modules namely:-</font></p>
+    <blockquote>
+      <blockquote>
+        <blockquote>
+          <p><font size="3"><b>a)TrajectoryModule :</b></font><font SIZE="2">- </font><font size="3">Calculates
+          the shortest path from point A to point B</font></p>
+          <p><font size="3"><b>b)Wireless Module :-</b>&nbsp; Converts x,y and
+          theta velocities for each robots into radio commands transmitted to
+          robots.</font></p>
+          <p>&nbsp;</p>
+        </blockquote>
+      </blockquote>
+    </blockquote>
+    <p><font size="3">All the code for above modules can be found under
+    common\modules folder. All these module are instantiated in the constructor
+    RobocupStandardModule.cpp. The call to this constructor is made in main.cpp.</font></p>
+    <h3>&nbsp;</h3>
+
+    <a name="State_Based_Approach"></a>
+    <h3><b><u>State Based Approach:</u></b></h3>
+
+    In 2002, all the skills and plays have state within them. This was made
+    possible by implementing skills and plays as objects instead of static utility functions. All
+    the play instances are stored in the Playbook in an array, while all the skill
+    instances are stored in each SkillSet array. The play and skill objects can have
+    private variables to store as much state they want. Having state allows us
+    to have historisis in skills easily. Historisis is helpful to have smooth transitions
+    in the system instead of jumpy ones.
+    <p>&nbsp;</p>
+    <p>&nbsp;</p>
+    <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+    <img border="0" src="images/ai_hierarchy.gif" width="336" height="296"></p>
+    <p>&nbsp;</p>
+    <p>We have a hierarchical model in our strategy design. The strategy
+    consists of multiple plays. Whenever a play is executed it calls the
+    action Functions for all positions present.
+    The action functions then run skills for the related robots which in turn determine where on the field the robots eventually move.</p>
+    <p>&nbsp;</p>
+
+ </body>
+</html>

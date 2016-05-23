@@ -1,0 +1,147 @@
+<html>
+ <head>
+ </head>
+ <body bgcolor="#FFFFFF" link="blue" alink="blue" vlink="blue">
+    <h2><b>Skills</b></h2>
+
+    <a name="Utility_Functions_with_State"></a>
+    <h3><b><u>Utility_Functions_with_State:</u></b></h3>
+
+Just as it is natural for one to think of athletes as having different skills, 
+it should also be natural for us to think of our robots as having different skills.  
+Thus, each robot should have different skill objects, each of which lets the robot perform a certain function.
+<p>
+This is precisely what we have implemented in the 2002 RoboCup system.  Each robot has a set of skills stored in a SkillSet object.  Each skill is different and performs a different function. 
+skills make coding easier by providing all the information a programmer would ever need at his/her finger tips: a timer, current vision data, parameters, specialized parameters
+for each skill, and a handle on the robot's destination. Skills allow state to be kept since
+skills are objects with private data, not just functions as used in the past. In addition, skills provide various methods for initialization, running, loading and reloading parameters, and much more.
+<p>
+Making skill objects in our system brings a number of advantages:
+<ul>
+
+ <li>Because skills are objects, we can store the state of each frame.  This allows us to perform more complicated maneuvers and frees us from making unnecessary calculations or storing state in global variables, which can be very messy.
+
+ <li>Skills make coding easier.  They provide a common interface, since every skill must be initialized and run.  Therefore, when writing high-level strategies, the programmer does not have to worry about exactly how the robot should move, and when it should dribble and kick.  Instead, he or she can simply call a skill and trust it to work as expected.  Thus, the code that utilizes an existing skill is simpler to write, and is also cleaner and easier to understand.
+
+ <li>Skills allow for easier testing, since we can test each skill individually.  We have individual skill plays and skill parameter files to allow us to test each skill separately and tweak its performance.  This is especially useful when robots are upgraded, as they will perform differently.
+
+ <li>Finally, skills allow for code reuse.  A programmer can simply call the skill to perform some function instead of reprogramming that maneuver in another part of the system.  This improves development time and reliability.  Once skill works well, it will work well any time it is called.
+
+</ul>
+
+
+    <a name="What_Tools_Information_do_Skills_Provide"></a>
+    <h3><b><u>What Tools/Information do Skills Provide?</u></b></h3>
+
+
+Each skill has a common interface and some common member objects, such as a timer, that are extended from the basic Skill class.  Note that the Skill class has many pure virtual functions that must be defined in skills that are derived from it, so only derived skills can be instantiated.
+<p>
+A skill is first initialized based on the current state of the field.  It is then run for that frame.  Afterwards, it can be evaluated and updated so that its performance can be improved. 
+<p>
+Below is a listing and explanation of all methods and stored data provided by all skills:
+<p>
+<b>Protected Variables:</b>
+<ul>
+ <li><font color="blue">const RoboCupParameters *params;</font><br>
+ Pointer to the RoboCup parameters.
+
+ <li><font color="blue">RoboCupStrategyModule *strategy;</font><br>
+pointer used for controlling the robot
+
+ <li><font color="blue">VisionModule *visionModule;</font><br>
+pointer to the vision module
+
+ <li><font color="blue">VisionData* currentVisionData;</font><br>
+Pointer to the current frame.  Currently, this must be updated each frame it needs to be used
+
+ <li><font color="blue">SkillSet *skillSet;</font><br>
+A pointer the skillset of the robot that owns this skill.  Useful when one skill wants to use another (lower-level) skill
+
+ <li><font color="blue">Destination* command;</font><br>
+A pointer to the robot's Destination object, used for controlling the robot.  Update this pointer in each frame it is used.
+
+ <li><font color="blue">RobotIndex robotID;</font><br>
+ID of the robot using the skill
+
+ <li><font color="blue">VisionTimer *timer;</font><br>
+A timer
+
+ <li><font color="blue">bool initialized;</font><br>
+Indicates if skill is active or not
+  
+ <li><font color="blue">bool hasBeenRun;</font><br>
+Indicates if the skill has been run this frame.  This is used to prevent a robot from running one of its skills more than once a frame, so that infinite skills can be avoided.
+
+</ul>
+
+<b>Methods:</b>
+
+<ul>
+<li><font color="blue">bool run();</font><br>
+The public function called from outside the skill that calls the skill's execute function.  It prevents execute() from being called more than once, preventing infinite loops.
+
+
+<li><font color="blue">bool isValid();</font><br>
+Call this function to check the prerequisites of the skill.  This will return a bool indicating whether or not the skill is viable in the present situation.
+
+
+<li><font color="blue">void initialize();</font><br>
+Perform any initializations for the skill.  These are any operations that are done once, before the skill actually runs for a number of frames
+
+
+<li><font color="blue">void unInitialize();</font><br>
+Sets initialized value to false, performed when positions switch, or plays transition
+
+
+<li><font color="blue">bool evaluate();</font><br>
+Evaluates the skill's performance, and sees if it can improve its behavior. Also indicates if the skill is still viable (whether it is frustrated or not).  True = skill is okay.  False = skill is frustrated.
+
+
+<li><font color="blue">void update();</font><br>
+For tweaking the skill.  You may want to change local parameters or behave differently to adapt to any situation that is frustrating the skill. 
+
+
+<li><font color="blue">bool isInitialized();</font><br>
+Indicates if the skill is initialized or not
+
+
+<li><font color="blue">bool isFinished(float tolerance=0.0f);</font><br>
+Indicates if the skill is finished or not, within the given tolerance
+ 
+
+<li><font color="blue">void loadValues();</font><br>
+Loads the skill's parameter values from a text file
+
+
+<li><font color="blue">void resetSkill();</font><br>
+Sets hasBeenRun to false so the skill can run next frame.
+
+
+<li><font color="blue">char* getName();</font><br>
+Returns the skill's name
+
+<li><font color="blue">void execute();</font><br>
+Executes the skill.  This is the main part of the skill, where you tell the robot how to perform the skill.
+</ul>
+
+    <a name="Skillsets_and_how_Skills_are_Created_and_Used"></a>
+    <h3><b><u>
+         SkillSets and how Skills are Created and Used:
+    </u></b></h3>
+
+Each robot has it's own skill set, which contains a unique instance of every skill included in the system. This allows multiple robots to be running the same skill, but have separate state information being stored. The SkillSet object has functions to perform certain functions on all skills in the set.  Specifically, it has functions to evaluate and update all skills, and one to reset all skills so they can be run the next frame. There is also a function to reload all skills' parameter values from their respective text files. This method is run when the skillset is first created, and can also be recalled by a GUI menu entry. The skillset methods in detail are:<ul>
+ <li><font color="blue">void evaluateSkillz();</font></br>
+Runs evaluate method of all skillz in the skill set
+
+ <li><font color="blue">void updateSkillz();</font></br>
+Runs update method of all skillz in the skill set
+
+ <li><font color="blue">void loadSkillParams();</font></br>
+Runs loadValues() method of all skillz in the skill set
+
+ <li><font color="blue">void resetSkillz();</font></br>
+Resets all skills' hasBeenRun variable so they can run next frame
+</ul>
+
+ </body>
+</html>

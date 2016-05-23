@@ -1,0 +1,125 @@
+<html>
+ <head>
+ </head>
+ <body bgcolor="#ffffff" link="blue" alink="blue" vlink="blue">
+    <h2><b>Networking</b></h2>
+
+The main function of CRISS is to emulate the
+vision and wireless robot systems.<span style="mso-spacerun: yes">&nbsp; </span>It
+receives <i style="mso-bidi-font-style:normal">AI data</i> from any external
+AI’s connected to the system, and sends <i style="mso-bidi-font-style:normal">field
+data</i> to the respective AI units.<span style="mso-spacerun: yes">&nbsp; </span>The
+networking portion of CRISS is responsible for establishing communications
+between the simulator and such AI clients.<span style="mso-spacerun: yes">&nbsp;
+</span>CRISS is equipped to use the 2002 Cornell RoboCup networking protocols,
+as established by the Networking subgroup.</font></p>
+<p class="MsoNormal">&nbsp;<o:p>
+</o:p>
+</p>
+<p class="MsoNormal">The networking module establishes a <i style="mso-bidi-font-style:
+normal">send and receive</i> server from the given IP and port number entered at
+the command line.<span style="mso-spacerun: yes">&nbsp; </span>If an invalid or
+no IP and port number were entered, the simulator will be initialized on the
+local host 127.0.0.1<i style="mso-bidi-font-style:normal"> </i>and port 4545.</p>
+<p class="MsoNormal">&nbsp;<o:p>
+</o:p>
+</p>
+
+    <a name="Framerate"></a>
+    <h3><b><u>Framerate:</u></b></h3>
+<p class="MsoNormal">&nbsp;<o:p>
+</o:p>
+</p>
+<p class="MsoNormal">After the server is established, the networking module
+enters a loop that passes any <i style="mso-bidi-font-style:normal">AI data</i>
+it receives to the physics engine, runs the physics engine for one cycle, and
+sends out vision Packet&nbsp; to the respective AI clients.<span style="mso-spacerun:
+yes">&nbsp; </span>In order to facilitate this process, the networking module
+converts <i style="mso-bidi-font-style:normal">AI data</i> and <i style="mso-bidi-font-style:normal">field
+data</i> into structs used by the physics engine.<span style="mso-spacerun: yes">&nbsp;
+</span>One pass through this process is known as a <i style="mso-bidi-font-style:normal">frame.<o:p>
+</o:p>
+</i></p>
+<p class="MsoNormal"><i style="mso-bidi-font-style:normal">&nbsp;<o:p>
+</o:p>
+</i></p>
+<p class="MsoNormal">The frame rate is defined to be the number of frames of
+data per second that the simulator passes and receives from the AI.<span style="mso-spacerun: yes">&nbsp;
+</span>The frame rate at which the simulator will run can be set under the
+required attribute <i style="mso-bidi-font-style:normal">frame_rate</i> in the
+tag <i style="mso-bidi-font-style:normal">&lt;simworld&gt; </i>of the XML
+parameters file.<span style="mso-spacerun: yes">&nbsp; </span>The simulator
+automatically adjusts the sleep time between each frame to maintain the desired
+frame rate.</p>
+<p class="MsoNormal">&nbsp;<o:p>
+</o:p>
+</p>
+
+    <a name="Latency"></a>
+    <h3><b><u>Latency:</u></b></h3>
+<p class="MsoNormal">&nbsp;<o:p>
+</o:p>
+<font size="3">A latency component is implemented in the networking module.<span style="mso-spacerun: yes">&nbsp;
+</span>This emulates the latency that is inherent in the actual vision, wireless
+and networking systems.<span style="mso-spacerun: yes">&nbsp; </span>In our
+implementation, the number of frames of latency is specified in the XML
+parameters file, under the attributes <i style="mso-bidi-font-style:normal">in_latency</i>
+and <i style="mso-bidi-font-style:
+normal">out_latency</i> in the tag <i style="mso-bidi-font-style:normal">&lt;simworld&gt;</i>.</font></p>
+<p class="MsoNormal"><font size="3">&nbsp;<o:p>
+</o:p>
+</font></p>
+<p class="MsoNormal"><font size="3">The <i style="mso-bidi-font-style:normal"><b>in_latency</b></i>
+refers to the number of frames of delay from the time when <i style="mso-bidi-font-style:
+normal">AI data </i>is sent by the AI to the time when these commands are
+executed by the robots.<span style="mso-spacerun: yes">&nbsp; </span>In other
+words, the physics engine will receive the <i style="mso-bidi-font-style:normal">AI
+data </i>after the number of frames specified by <i style="mso-bidi-font-style:
+normal">in_latency</i>.</font></p>
+<p class="MsoNormal"><font size="3">&nbsp;<o:p>
+</o:p>
+</font></p>
+<p class="MsoNormal"><font size="3">The <i style="mso-bidi-font-style:normal"><b>out_latency</b></i>
+mimics the latency from vision processing in returning current <i style="mso-bidi-font-style:normal">field
+data</i> to the AI.<span style="mso-spacerun: yes">&nbsp; </span><i style="mso-bidi-font-style:normal">Out_latency</i>
+specifies the number of frames that the <i style="mso-bidi-font-style:normal">field
+data</i> is delayed before being sent to the AI.<span style="mso-spacerun:
+yes">&nbsp;</span></font></p>
+<p class="MsoNormal"><font size="3">&nbsp;<o:p>
+</o:p>
+</font></p>
+<p class="MsoNormal"><font size="3">The default latency is set to 0 – the
+current <i style="mso-bidi-font-style:normal">field data</i> is returned to the
+AI without delay, and the current <i style="mso-bidi-font-style:normal">AI data</i>
+is sent to the physics engine without delay.<span style="mso-spacerun: yes">&nbsp;
+</span>This feature allows for the testing of AI prediction algorithms and
+similar code.</font></p>
+<p class="MsoNormal"><u><o:p>
+</o:p>
+</u></p>
+
+    <a name="Vision_Noise"></a>
+    <h3><b><u>Vision Noise:</u></b></h3>
+
+</u></p>
+<span style="font-size:12.0pt;font-family:&quot;Times New Roman&quot;;mso-fareast-font-family:
+&quot;Times New Roman&quot;;mso-ansi-language:EN-US;mso-fareast-language:EN-US;
+mso-bidi-language:AR-SA">The real vision system has some noise within it. We use
+a simple model to model this noise in the simulator. A random number is
+generated between 0 and 1 (radius_noise) as well as between 0 and 2*PI (angle_noise).
+This is used to get the translational_noise by adding the real x with<span style="mso-spacerun: yes">&nbsp;
+</span>radius_noise * cos(angle_noise) and real y with radius_noise *sin(angle_noise).
+The rotational noise is uniformly distributed between –5 and +5 degrees. This
+is not an exact model of the noise but it is good enough to give the AI or
+arbiter the sensation of noise.</span>
+<p>&nbsp;</p>
+<p class="MsoNormal">
+<p align="center"><img border="0" src="images/simulator_networking.gif" width="235" height="143"><o:p>
+</o:p>
+</p>
+<p align="center">&nbsp;</p>
+<p align="left">&nbsp;</p>
+
+</body>
+
+</html>

@@ -1,0 +1,24 @@
+<html>
+ <head>
+ </head>
+ <body bgcolor="#FFFFFF" link="blue" alink="blue" vlink="blue">
+    <h2><b>Plays</b></h2>
+
+    <a name="What_Do_Plays_Do"></a>
+    <h3><b><u>What do plays do?</u></b></h3>
+
+Any particular play represents a particular global state of the AI and the 
+general goal the positions are attempting to achieve at a given time. Examples are singleAssistOffense, cageDefense, jamAndShoot. Plays in and of themselves are actually quite simple. During any play action functions for 
+positions that are present are called. There are unique action functions for each position for each play. The plays do not call skill directly, rather the action functions ultimately run skills that set robot destinations. As the game changes over time, the system will transition from one play to another when necessary, but while in a particular state a particular play is being executed every frame.
+
+    <a name="Where_Are_Plays_Called"></a>
+    <h3><b><u>Where are plays called?</u></b></h3>
+
+In <font color="red">
+robocup-ai-2002/RoboCup_Modules/RoboCupStrategyModule.cpp</font>, in the execute method you'll see the line:<br>
+<font color="blue">
+currentPlay->executePlay(vision->getCurrentFrame(), &RCstrategyData[currentFrame]);</font><br>
+This line runs the execute function of the current play for the given frame.
+
+ </body>
+</html>

@@ -1,0 +1,47 @@
+/*
+ *	AggressorRecoverBallSkill_Test.h
+ */
+#ifndef PLAYS_AGGRESSOR_RECOVER_BALL_SKILL_TEST_H
+#define PLAYS_AGGRESSOR_RECOVER_BALL_SKILL_TEST_H
+
+#include "../baseplay.h"
+#include "../basic_actions.h"
+#include "Skillz/SkillSet.h"
+#include "Skillz/AggressorRecoverBallSkill.h"
+
+class AggressorRecoverBallSkillTest : public BasePlay 
+{
+public:
+  static Play playNum;
+  //====================================
+  Play getID() const 
+  {
+	  return playNum;
+  }
+  //====================================
+  char* getName() const 
+  { 
+	  return "Aggressor Recover Ball Skill"; 
+  }
+  //====================================
+  virtual void initializePlay(const VisionData& vision, RobocupStrategyData* rsd);
+  //====================================
+  virtual void executePlay(VisionData* vision, RobocupStrategyData* rsd);
+  //====================================
+  virtual ActionFunction getActionFunction(Position pos); 
+  //====================================
+private:
+  //Index of robot that will be spinning
+  RobotIndex ID;
+
+  //Handle on skillset for the spinning robot
+  SkillSet* skills;
+
+  //Handle on spinning skill
+  AggressorRecoverBallSkill* recoverBallSkill;
+};
+
+#endif //PLAYS_AGGRESSOR_RECOVER_BALL_SKILL_TEST_H
+
+
+
